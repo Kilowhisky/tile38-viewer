@@ -19,50 +19,53 @@ export function Connection({ connection, onChange, onSubmit }: ConnectionProps) 
   const [connecting, setConnecting] = useState(false)
 
   return (
-    <Grid container spacing={2} alignItems={'center'}>
-      <Grid item>
-        <TextField
-          fullWidth
-          label="Address:Port"
-          placeholder="x.x.x.x:9851"
-          value={connection.address}
-          onChange={(e) => onChange({
-            id: connection.id,
-            address: e.target.value,
-            password: connection.password
-          })}
-        />
-      </Grid>
-      <Grid item >
-        <TextField
-          fullWidth
-          label="Password"
-          type="password"
-          value={connection.password}
-          onChange={(e) => onChange({
-            id: connection.id,
-            address: connection.address,
-            password: e.target.value
-          })}
-        />
-      </Grid>
-      <Grid item>
-        <LoadingButton
-          color={"primary"}
-          title="Connect"
-          disabled={!connection.address}
-          loading={connecting}
-          endIcon={<LoginIcon />}
-          onClick={() => {
-            setConnecting(true)
-            onSubmit(connection)
-              .finally(() => {
-                setConnecting(false)
-              })
-          }}>
-          Connect
-        </LoadingButton>
-      </Grid>
-    </Grid >
+    <form onSubmit={e => {
+      e.preventDefault();
+      setConnecting(true)
+      onSubmit(connection).finally(() => {
+        setConnecting(false)
+      })
+    }}>
+      <Grid container spacing={2} alignItems={'center'} >
+        <Grid item sm={5}>
+          <TextField
+            required
+            fullWidth
+            label="Address:Port"
+            placeholder="x.x.x.x:9851"
+            value={connection.address}
+            onChange={(e) => onChange({
+              id: connection.id,
+              address: e.target.value,
+              password: connection.password
+            })}
+          />
+        </Grid>
+        <Grid item sm={5} >
+          <TextField
+            fullWidth
+            label="Password"
+            type="password"
+            value={connection.password}
+            onChange={(e) => onChange({
+              id: connection.id,
+              address: connection.address,
+              password: e.target.value
+            })}
+          />
+        </Grid>
+        <Grid item>
+          <LoadingButton
+            color={"primary"}
+            title="Connect"
+            disabled={!connection.address}
+            loading={connecting}
+            endIcon={<LoginIcon />}
+            type="submit">
+            Connect
+          </LoadingButton>
+        </Grid>
+      </Grid >
+    </form>
   )
 }

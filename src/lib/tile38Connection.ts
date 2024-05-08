@@ -3,39 +3,56 @@ import { ConnectionInfo } from "../components/Connection";
 
 
 export class Tile38Connection {
-  private _conn: WebSocket | undefined;
+  ready = false;
 
-  private get _ready() {
-    return this._conn?.readyState == WebSocket.OPEN
+  constructor(private _info: ConnectionInfo) {
+    if (!_info.address.startsWith("http")) {
+      _info.address = `http://${_info.address}`;
+    }
   }
 
-  constructor(private _info: ConnectionInfo) { }
+  async connect(): Promise<boolean> {
+    return this.ready = await this.ping();
+  }
 
-  async connect(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      try {
-        this._conn = new WebSocket(this._info.address);
-        this._conn.onmessage = this._handleMessage;
-        this._conn.onopen = () => {
-          if (this._info.password) {
-            this._conn?.send(`AUTH ${this._info.password}`)
-          }
-          this._conn?.send(`SERVER`);
-          resolve();
-        };
-        this._conn.onerror = (e) => {
-          console.error(this._conn, e);
-          reject();
-        }
+  async ping(): Promise<boolean> {
+    const response = await this._makeRequest("PING") as PingResponse;
+    return response.ok && response.ping == "pong";
+  }
 
-      } catch (e) {
-        console.error(e);
-        reject();
+  private async _makeRequest(command: string): Promise<Response> {
+    const request: Request = new Request(this._info.address, {
+      method: 'POST',
+      body: command,
+      headers: {
+        'Content-Type': 'text/plain',
       }
     });
-  }
+    if (this._info.password) {
+      request.headers.set("Authorization", this._info.password);
+    }
 
-  _handleMessage(me: MessageEvent) {
-    console.log(me);
+    const response = await fetch(request);
+    const result = await response.text();
+    if (!response.ok) {
+      console.error('Tile38 sent bad response', result);
+      return {
+        ok: false,
+        elapsed: "0µs",
+        err: `Tile38 sent bad response: ${result}`
+      }
+    }
+
+    return JSON.parse(result);
   }
+}
+
+export interface Response {
+  ok: boolean
+  err?: string
+  elapsed: string
+}
+
+export interface PingResponse extends Response {
+  ping: string
 }
