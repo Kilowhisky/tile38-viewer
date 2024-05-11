@@ -1,0 +1,32 @@
+.key-summary {
+  .MuiAccordionSummary-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 10px;
+  }
+}
+
+.chip-container {
+  flex-basis: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+
+  .chip-block {
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px;
+
+    .chip {
+      font-size: 14px;
+
+      .MuiSvgIcon-root {
+        width: auto;
+        height: 0.75em;
+        vertical-align: sub;
+        padding-right: 5px;
+      }
+    }
+  }
+}

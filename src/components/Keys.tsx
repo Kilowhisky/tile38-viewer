@@ -5,8 +5,15 @@ import MuiAccordionSummary, {
   AccordionSummaryProps,
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { KeyStats, KeysResponse, Tile38Context } from '../lib/tile38Connection';
+import PlaceTwoToneIcon from '@mui/icons-material/PlaceTwoTone';
+import HexagonTwoToneIcon from '@mui/icons-material/HexagonTwoTone';
+import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
+import NumbersIcon from '@mui/icons-material/Numbers';
+import { Tooltip } from '@mui/material';
+import MemoryIcon from '@mui/icons-material/Memory';
+import './Keys.css';
 
 // Based on this: https://mui.com/material-ui/react-accordion/
 
@@ -85,10 +92,29 @@ export default function Keys() {
     <div>
       {keys.map(k => (
         <Accordion key={k.key} expanded={expanded === k.key} onChange={handleChange(k.key)}>
-          <AccordionSummary sx={{ '.MuiAccordionSummary-content': { display: 'flex', justifyContent: 'space-between' } }}>
+          <AccordionSummary className='key-summary'>
             <span>{k.key}</span>
-            <span><HumanFileSize size={k.stats.in_memory_size} /> </span>
-            <span>{k.count}</span>
+            <div className='chip-container'>
+              <div className='chip-block' style={{ flexBasis: '25%'}}>
+                <StatChip enabled={!!k.stats.num_strings} title='# STRINGs' >
+                  <span><FormatQuoteRoundedIcon />{k.stats.num_strings}</span>
+                </StatChip>
+                <StatChip enabled={!!k.stats.num_objects} title='# OBJECTs' >
+                  <span><HexagonTwoToneIcon />{k.stats.num_objects}</span>
+                </StatChip>
+                <StatChip enabled={!!k.stats.num_points} title='# POINTs' >
+                  <span><PlaceTwoToneIcon />{k.stats.num_points}</span>
+                </StatChip>
+              </div>
+              <div className='chip-block' style={{ flexBasis: '25%'}}>
+                <StatChip enabled={true} title='Memory Used' >
+                  <span><MemoryIcon /><HumanFileSize size={k.stats.in_memory_size} /></span>
+                </StatChip>
+                <StatChip enabled={true} title='Count of Items in Key' >
+                  <span><NumbersIcon />{k.count}</span>
+                </StatChip>
+              </div>
+            </div>
           </AccordionSummary>
           <AccordionDetails>sdfsdf</AccordionDetails>
         </Accordion>
@@ -97,7 +123,19 @@ export default function Keys() {
   )
 }
 
+// From here: https://stackoverflow.com/a/20732091/1148118
 function HumanFileSize({ size }: { size: number }) {
   const i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
-  return +((size / Math.pow(1024, i)).toFixed(2)) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+  const str = +((size / Math.pow(1024, i)).toFixed(2)) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+  return <span className='human-file-size'>{str}</span>
+}
+
+function StatChip({ enabled, children, title }: { enabled: boolean, children: ReactNode, title: string }) {
+  if (enabled) {
+    return (
+      <Tooltip title={title}>
+        <span className='chip'>{children}</span>
+      </Tooltip>
+    )
+  }
 }
