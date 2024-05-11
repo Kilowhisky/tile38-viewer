@@ -1,6 +1,5 @@
+import { createContext } from "react";
 import { ConnectionInfo } from "../components/Connection";
-
-
 
 export class Tile38Connection {
   ready = false;
@@ -16,11 +15,23 @@ export class Tile38Connection {
   }
 
   async ping(): Promise<boolean> {
-    const response = await this._makeRequest("PING") as PingResponse;
+    const response = await this._makeRequest<PingResponse>("PING");
     return response.ok && response.ping == "pong";
   }
 
-  private async _makeRequest(command: string): Promise<Response> {
+  async raw(command: string): Promise<CmdResponse> {
+    return this._makeRequest(command);
+  }
+
+  async keysCount(key: string): Promise<CountResponse> { 
+    return await this._makeRequest<CountResponse>(`SCAN ${key} MATCH * COUNT`)
+  }
+
+  async stats(...keys: string[]): Promise<StatsResponse> {
+    return await this._makeRequest<StatsResponse>(`STATS ${keys.join(' ')}`)
+  }
+
+  private async _makeRequest<RType extends CmdResponse>(command: string): Promise<RType> {
     const request: Request = new Request(this._info.address, {
       method: 'POST',
       body: command,
@@ -40,19 +51,42 @@ export class Tile38Connection {
         ok: false,
         elapsed: "0µs",
         err: `Tile38 sent bad response: ${result}`
-      }
+      } as RType
     }
 
     return JSON.parse(result);
   }
 }
+export const Tile38Context = createContext<Tile38Connection>(new Tile38Connection({
+  id: 'fake',
+  address: ''
+}));
 
-export interface Response {
+export interface CmdResponse {
   ok: boolean
   err?: string
   elapsed: string
 }
 
-export interface PingResponse extends Response {
+export interface PingResponse extends CmdResponse {
   ping: string
+}
+
+export interface KeysResponse extends CmdResponse {
+  keys: string[]
+}
+
+export interface CountResponse extends CmdResponse {
+  count: number
+}
+
+export interface KeyStats {
+  in_memory_size: number
+  num_objects: number
+  num_points: number
+  num_strings: number
+}
+
+export interface StatsResponse extends CmdResponse {
+  stats: Array<KeyStats | null>
 }

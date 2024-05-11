@@ -1,0 +1,23 @@
+.terminal-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .terminal {
+    flex-grow: 1;
+    overflow: auto;
+    pre {
+      margin: 0;
+      padding: 5px;
+    }
+    > ul {
+      margin: 0 !important;
+      padding: 0 !important;
+      padding-bottom: 10px !important;
+    }
+  }
+
+  .MuiTabPanel-root {
+    padding: 0;
+  }
+}

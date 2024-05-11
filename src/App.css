@@ -1,0 +1,29 @@
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+}
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-container {
+  flex: 1 0 auto;
+  height: auto !important;
+
+  .panel-left {
+    background-color: red;
+  }
+  .panel-top {
+    background-color: aqua;
+  }
+  .panel-bottom {
+    display: flex;
+    flex-direction: column;
+  }
+  .panel-handle {
+    background-color: green;
+  }
+}
