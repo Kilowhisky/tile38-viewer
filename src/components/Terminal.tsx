@@ -1,9 +1,10 @@
 import { TextField } from "@mui/material";
 import './Terminal.css';
 import { useCallback, useContext, useState } from "react";
-import { CmdResponse, Tile38Context } from "../lib/tile38Connection";
+import { Tile38Context } from "../lib/tile38Connection";
 import { JSONTree } from "react-json-tree";
 import theme from 'react-base16-styling/src/themes/apathy';
+import { CmdResponse } from "../lib/tile38Connection.models";
 
 interface CommandEntry {
   id: string

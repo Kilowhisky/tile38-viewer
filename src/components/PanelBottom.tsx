@@ -21,9 +21,9 @@ export function PanelBottom() {
           <Tab label="Hooks" value="3" />
         </TabList>
       </Box>
-      <TabPanel value="1" sx={{ padding: 0, flex: 1, overflow: 'hidden' }}><Terminal /></TabPanel>
-      <TabPanel value="2" sx={{ padding: 0, flex: 1, overflow: 'hidden' }}><Keys /></TabPanel>
-      <TabPanel value="3" sx={{ padding: 0, flex: 1, overflow: 'hidden' }}>Hooks</TabPanel>
+      <TabPanel value="1" sx={{ padding: 0, flex: 1, overflow: 'auto' }}><Terminal /></TabPanel>
+      <TabPanel value="2" sx={{ padding: 0, flex: 1, overflow: 'auto' }}><Keys /></TabPanel>
+      <TabPanel value="3" sx={{ padding: 0, flex: 1, overflow: 'auto' }}>Hooks</TabPanel>
     </TabContext>
   )
 }

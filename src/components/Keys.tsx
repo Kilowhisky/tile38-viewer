@@ -6,7 +6,7 @@ import MuiAccordionSummary, {
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import { ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { KeyStats, KeysResponse, Tile38Context } from '../lib/tile38Connection';
+import { Tile38Context } from '../lib/tile38Connection';
 import PlaceTwoToneIcon from '@mui/icons-material/PlaceTwoTone';
 import HexagonTwoToneIcon from '@mui/icons-material/HexagonTwoTone';
 import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
@@ -14,6 +14,10 @@ import NumbersIcon from '@mui/icons-material/Numbers';
 import { Tooltip } from '@mui/material';
 import MemoryIcon from '@mui/icons-material/Memory';
 import './Keys.css';
+import { HumanFileSize } from './HumanFileSize';
+import { KeyItemList } from './KeyItemList';
+import { KeyStats, KeysResponse } from '../lib/tile38Connection.models';
+import { removeItem } from '../lib/arrayHelpers';
 
 // Based on this: https://mui.com/material-ui/react-accordion/
 
@@ -61,11 +65,12 @@ interface KeySummary {
 export default function Keys() {
   const tile38 = useContext(Tile38Context);
   const [keys, setKeys] = useState<KeySummary[]>([]);
-  const [expanded, setExpanded] = useState<string | false>('panel1');
+  const [expanded, setExpanded] = useState<string[]>([]);
 
-  const handleChange = (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
-    setExpanded(newExpanded ? panel : false);
-  };
+  const handleChange = useCallback((panel: string, expanding: boolean) => {
+    if (expanding) setExpanded([...expanded, panel]);
+    else setExpanded([...removeItem(expanded, panel)]);
+  }, [expanded]);
 
   const loadKeys = useCallback(async () => {
     const response = await tile38.raw("KEYS *") as KeysResponse;
@@ -89,13 +94,13 @@ export default function Keys() {
   }, [loadKeys])
 
   return (
-    <div>
+    <div className='keys-container'>
       {keys.map(k => (
-        <Accordion key={k.key} expanded={expanded === k.key} onChange={handleChange(k.key)}>
+        <Accordion key={k.key} expanded={expanded.includes(k.key)} onChange={(_, y) => handleChange(k.key, y)}>
           <AccordionSummary className='key-summary'>
             <span>{k.key}</span>
             <div className='chip-container'>
-              <div className='chip-block' style={{ flexBasis: '25%'}}>
+              <div className='chip-block'>
                 <StatChip enabled={!!k.stats.num_strings} title='# STRINGs' >
                   <span><FormatQuoteRoundedIcon />{k.stats.num_strings}</span>
                 </StatChip>
@@ -106,7 +111,7 @@ export default function Keys() {
                   <span><PlaceTwoToneIcon />{k.stats.num_points}</span>
                 </StatChip>
               </div>
-              <div className='chip-block' style={{ flexBasis: '25%'}}>
+              <div className='chip-block'>
                 <StatChip enabled={true} title='Memory Used' >
                   <span><MemoryIcon /><HumanFileSize size={k.stats.in_memory_size} /></span>
                 </StatChip>
@@ -116,18 +121,11 @@ export default function Keys() {
               </div>
             </div>
           </AccordionSummary>
-          <AccordionDetails>sdfsdf</AccordionDetails>
+          <AccordionDetails className='key-details'><KeyItemList itemKey={k.key} /></AccordionDetails>
         </Accordion>
       ))}
     </div>
   )
-}
-
-// From here: https://stackoverflow.com/a/20732091/1148118
-function HumanFileSize({ size }: { size: number }) {
-  const i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
-  const str = +((size / Math.pow(1024, i)).toFixed(2)) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
-  return <span className='human-file-size'>{str}</span>
 }
 
 function StatChip({ enabled, children, title }: { enabled: boolean, children: ReactNode, title: string }) {

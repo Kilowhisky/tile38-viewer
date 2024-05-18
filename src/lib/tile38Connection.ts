@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import { ConnectionInfo } from "../components/Connection";
+import { PingResponse, CmdResponse, CountResponse, StatsResponse } from "./tile38Connection.models";
 
 export class Tile38Connection {
   ready = false;
@@ -19,11 +20,11 @@ export class Tile38Connection {
     return response.ok && response.ping == "pong";
   }
 
-  async raw(command: string): Promise<CmdResponse> {
-    return this._makeRequest(command);
+  async raw<TResponse extends CmdResponse = CmdResponse>(command: string): Promise<TResponse> {
+    return this._makeRequest<TResponse>(command);
   }
 
-  async keysCount(key: string): Promise<CountResponse> { 
+  async keysCount(key: string): Promise<CountResponse> {
     return await this._makeRequest<CountResponse>(`SCAN ${key} MATCH * COUNT`)
   }
 
@@ -57,36 +58,8 @@ export class Tile38Connection {
     return JSON.parse(result);
   }
 }
+
 export const Tile38Context = createContext<Tile38Connection>(new Tile38Connection({
   id: 'fake',
   address: ''
 }));
-
-export interface CmdResponse {
-  ok: boolean
-  err?: string
-  elapsed: string
-}
-
-export interface PingResponse extends CmdResponse {
-  ping: string
-}
-
-export interface KeysResponse extends CmdResponse {
-  keys: string[]
-}
-
-export interface CountResponse extends CmdResponse {
-  count: number
-}
-
-export interface KeyStats {
-  in_memory_size: number
-  num_objects: number
-  num_points: number
-  num_strings: number
-}
-
-export interface StatsResponse extends CmdResponse {
-  stats: Array<KeyStats | null>
-}
