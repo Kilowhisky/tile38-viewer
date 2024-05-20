@@ -3,6 +3,7 @@ import { StoreApi, UseBoundStore, create, useStore } from "zustand";
 import { useTile38 } from "../lib/tile38Connection.store";
 import { isString } from "../lib/stringHelpers";
 import { CountResponse, ScanObjectResponse } from "../lib/tile38Connection.models";
+import { unique } from "../lib/arrayHelpers";
 
 export interface KeyData {
   id: string
@@ -41,7 +42,7 @@ export function useKeyItemStore<T>(key: string, selector?: (state: KeyItemState)
         })
       },
       async load(limit: number) {
-        const { key, cursor, data } = get();
+        const { key, cursor, data, fields } = get();
         const tile38 = useTile38.getState().connection!;
         const result: Partial<KeyItemState> = {};
         // Get total for paging use
@@ -54,12 +55,12 @@ export function useKeyItemStore<T>(key: string, selector?: (state: KeyItemState)
         const response = await tile38.raw<ScanObjectResponse>(`SCAN ${key} CURSOR ${cursor || 0} limit ${limit}`);
         if (response.ok) {
           result.cursor = response.cursor;
-          result.fields = response.fields || [];
+          result.fields = unique([...fields, ...(response.fields || [])]);
           result.data = [
             ...data,
             ...response.objects.map(x => ({
               id: x.id,
-              type: isString(x.object) ? "STRING" : (x.object as Geometry).type,
+              type: isString(x.object) ? "String" : (x.object as Geometry).type,
               object: x.object,
               fields: x.fields || []
             }))

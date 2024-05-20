@@ -7,3 +7,9 @@ export function removeItem<T>(arr: Array<T>, item: T) {
   }
   return arr;
 }
+
+export function unique<T>(arr: Array<T>) {
+  return arr.filter((item, index) => {
+    return arr.indexOf(item) == index;
+  })
+}
