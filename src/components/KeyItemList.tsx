@@ -1,57 +1,30 @@
-import { useCallback, useContext, useEffect, useState } from "react"
-import { Tile38Context } from "../lib/tile38Connection";
-import { ScanObjectResponse } from "../lib/tile38Connection.models";
+import { useEffect } from "react"
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import { Geometry } from "geojson";
-import { isString } from "../lib/stringHelpers";
-import { TableHead } from "@mui/material";
+import { Button, TableFooter, TableHead } from "@mui/material";
 import { ItemTtl } from "./ItemTtl";
+import { useKeyItemStore } from "./KeyItemList.store";
 
-// Based on this: https://mui.com/material-ui/react-table/#virtualized-table
+// Based on this: https://mui.com/material-ui/react-table/
 // -------------------------------------------------------------------------
-interface Data {
-  id: string
-  type: string
-  object: string | Geometry
-  fields: Array<string | number>
-}
-
 export interface KeyItemListProps {
   itemKey: string
 }
 
 export function KeyItemList({ itemKey }: KeyItemListProps) {
-  // Query state
-  const tile38 = useContext(Tile38Context);
-  const [cursor, setCursor] = useState(0);
-
-  // Table State
-  const [fields, setFields] = useState<string[]>([]);
-  const [rows, setRows] = useState<Data[]>([]);
-
-  const load = useCallback(async () => {
-    const response = await tile38.raw(`SCAN ${itemKey} CURSOR ${cursor} limit 50`) as ScanObjectResponse;
-    if (response.ok) {
-      setCursor(response.cursor);
-      setFields(response.fields || []);
-      rows.push(
-        ...response.objects.map(x => ({
-          id: x.id,
-          type: isString(x.object) ? "STRING" : (x.object as Geometry).type,
-          object: x.object,
-          fields: x.fields || []
-        }))
-      );
-    }
-  }, [rows, tile38, cursor, itemKey]);
+  const load = useKeyItemStore(itemKey, x => x.load);
+  const fields = useKeyItemStore(itemKey, x => x.fields);
+  const data = useKeyItemStore(itemKey, x => x.data);
+  const total = useKeyItemStore(itemKey, x => x.total);
 
   useEffect(() => {
-    load();
-  }, [tile38])
+    if (!data.length) {
+      load(50);
+    }
+  }, [])
 
 
   return (
@@ -66,7 +39,7 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(r => (
+          {data.map(r => (
             <TableRow key={r.id}>
               <TableCell>{r.id}</TableCell>
               <TableCell>{r.type}</TableCell>
@@ -77,6 +50,14 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
             </TableRow>
           ))}
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={fields?.length + 3}>
+              <span style={{ paddingRight: 5 }}>Showing {data.length} out of {total}</span>
+              {data.length !== total && <Button>Load 50 More</Button>}
+            </TableCell>
+          </TableRow>
+        </TableFooter>
       </Table>
     </TableContainer>
   )

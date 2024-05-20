@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, DialogContent, DialogContentText, Box, Divider, IconButton, Link } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogContentText, Box, Divider, Link } from "@mui/material";
 import { useLocalStorage } from "../lib/useLocalStorage";
 import { Connection, ConnectionInfo } from "./Connection";
 import { useState } from "react";

@@ -1,37 +1,16 @@
 import { TextField } from "@mui/material";
 import './Terminal.css';
-import { useCallback, useContext, useState } from "react";
-import { Tile38Context } from "../lib/tile38Connection";
 import { JSONTree } from "react-json-tree";
 import theme from 'react-base16-styling/src/themes/apathy';
-import { CmdResponse } from "../lib/tile38Connection.models";
-
-interface CommandEntry {
-  id: string
-  cmd: string | CmdResponse
-}
+import { useTerminalStore } from "./Terminal.store";
 
 export function Terminal() {
-  const tile38 = useContext(Tile38Context);
-
-  const [command, setCommand] = useState("");
-  const [history] = useState<Array<CommandEntry>>([]);
-
-  const submit = useCallback(async () => {
-    history.push({
-      id: crypto.randomUUID(),
-      cmd: command
-    }, {
-      id: crypto.randomUUID(),
-      cmd: await tile38.raw(command)
-    });
-    setCommand('');
-  }, [history, command, tile38])
+  const store = useTerminalStore();
 
   return (
     <div className="terminal-container">
       <div className="terminal">
-        {history.map(e => {
+        {store.history.map(e => {
           if (typeof e.cmd === 'string' || e.cmd instanceof String) {
             return <pre
               key={e.id}
@@ -46,13 +25,13 @@ export function Terminal() {
       </div>
       <TextField
         fullWidth
-        value={command}
+        value={store.cmd}
         variant="filled"
         label="Command..."
-        onChange={x => setCommand(x.target.value)}
+        onChange={x => store.setCmd(x.target.value)}
         onKeyDown={e => {
           if (e.key === "Enter") {
-            submit();
+            store.execute(store.cmd);
             e.preventDefault();
           }
         }} />

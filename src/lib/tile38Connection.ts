@@ -1,4 +1,3 @@
-import { createContext } from "react";
 import { ConnectionInfo } from "../components/Connection";
 import { PingResponse, CmdResponse, CountResponse, StatsResponse } from "./tile38Connection.models";
 
@@ -58,8 +57,3 @@ export class Tile38Connection {
     return JSON.parse(result);
   }
 }
-
-export const Tile38Context = createContext<Tile38Connection>(new Tile38Connection({
-  id: 'fake',
-  address: ''
-}));

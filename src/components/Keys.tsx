@@ -5,8 +5,7 @@ import MuiAccordionSummary, {
   AccordionSummaryProps,
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import { ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { Tile38Context } from '../lib/tile38Connection';
+import { ReactNode, useEffect } from 'react';
 import PlaceTwoToneIcon from '@mui/icons-material/PlaceTwoTone';
 import HexagonTwoToneIcon from '@mui/icons-material/HexagonTwoTone';
 import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
@@ -16,8 +15,7 @@ import MemoryIcon from '@mui/icons-material/Memory';
 import './Keys.css';
 import { HumanFileSize } from './HumanFileSize';
 import { KeyItemList } from './KeyItemList';
-import { KeyStats, KeysResponse } from '../lib/tile38Connection.models';
-import { removeItem } from '../lib/arrayHelpers';
+import { useKeyStore } from './Keys.store';
 
 // Based on this: https://mui.com/material-ui/react-accordion/
 
@@ -56,47 +54,24 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
-interface KeySummary {
-  key: string
-  count: number
-  stats: KeyStats
-}
-
 export default function Keys() {
-  const tile38 = useContext(Tile38Context);
-  const [keys, setKeys] = useState<KeySummary[]>([]);
-  const [expanded, setExpanded] = useState<string[]>([]);
-
-  const handleChange = useCallback((panel: string, expanding: boolean) => {
-    if (expanding) setExpanded([...expanded, panel]);
-    else setExpanded([...removeItem(expanded, panel)]);
-  }, [expanded]);
-
-  const loadKeys = useCallback(async () => {
-    const response = await tile38.raw("KEYS *") as KeysResponse;
-    const newKeys = [];
-
-    for (let i = 0; i < response.keys.length; i++) {
-      const key = response.keys[i];
-      newKeys.push({
-        key,
-        count: (await tile38.keysCount(key)).count,
-        stats: (await tile38.stats(key)).stats[0]!
-      })
-    }
-
-    setKeys(newKeys.sort((a, b) => a.key.toLowerCase().localeCompare(b.key.toLowerCase())));
-
-  }, [tile38]);
+  const keys = useKeyStore(x => x.keys)
+  const load = useKeyStore(x => x.load)
+  const expanded = useKeyStore(x => x.expanded)
+  const expand = useKeyStore(x => x.expand)
+  const collapse = useKeyStore(x => x.collapse)
 
   useEffect(() => {
-    loadKeys();
-  }, [loadKeys])
+    load();
+  }, [load])
 
   return (
     <div className='keys-container'>
       {keys.map(k => (
-        <Accordion key={k.key} expanded={expanded.includes(k.key)} onChange={(_, y) => handleChange(k.key, y)}>
+        <Accordion
+          key={k.key}
+          expanded={expanded.includes(k.key)}
+          onChange={(_, y) => y ? expand(k.key) : collapse(k.key)} >
           <AccordionSummary className='key-summary'>
             <span>{k.key}</span>
             <div className='chip-container'>
