@@ -21,13 +21,21 @@ export const useTerminalStore = create<TerminalState>()((set, get) => {
 
     async execute(cmd: string) {
       const tile38 = useTile38.getState().connection!;
+      const cmdEntered = {
+        id: crypto.randomUUID(),
+        cmd
+      }
       const entry = {
         id: crypto.randomUUID(),
         cmd: await tile38.raw(cmd)
       }
       set(() => ({
         cmd: '',
-        history: [...get().history, entry]
+        history: [
+          ...get().history,
+          cmdEntered,
+          entry
+        ]
       }))
       return entry;
     },

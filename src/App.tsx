@@ -9,6 +9,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import { PanelBottom } from './components/PanelBottom';
 import { useTile38 } from './lib/tile38Connection.store';
+import { PanelTop } from './components/PanelTop';
 
 export default function App() {
   // Tile38 setup
@@ -32,7 +33,7 @@ export default function App() {
           <Header />
           <PanelGroup direction="vertical" className='panel-container'>
             <Panel className='panel-top' minSize={10}>
-              top
+              <PanelTop />
             </Panel>
             <PanelResizeHandle className='panel-handle' />
             <Panel className='panel-bottom' minSize={15}>

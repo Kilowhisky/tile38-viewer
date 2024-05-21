@@ -3,6 +3,9 @@ import { Box, Tab } from "@mui/material";
 import { useState } from "react";
 import { Terminal } from "./Terminal";
 import Keys from "./Keys";
+import { Hooks } from "./Hooks";
+import { Channels } from "./Channels";
+import { Server } from "./Server";
 
 
 export function PanelBottom() {
@@ -15,15 +18,19 @@ export function PanelBottom() {
   return (
     <TabContext value={value}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <TabList onChange={handleChange} aria-label="lab API tabs example">
+        <TabList onChange={handleChange}>
           <Tab label="Terminal" value="1" />
           <Tab label="Keys" value="2" />
           <Tab label="Hooks" value="3" />
+          <Tab label="Channels" value="4" />
+          <Tab label="Server" value="5" />
         </TabList>
       </Box>
       <TabPanel value="1" sx={{ padding: 0, flex: 1, overflow: 'auto' }}><Terminal /></TabPanel>
       <TabPanel value="2" sx={{ padding: 0, flex: 1, overflow: 'auto' }}><Keys /></TabPanel>
-      <TabPanel value="3" sx={{ padding: 0, flex: 1, overflow: 'auto' }}>Hooks</TabPanel>
+      <TabPanel value="3" sx={{ padding: 0, flex: 1, overflow: 'auto' }}><Hooks /></TabPanel>
+      <TabPanel value="4" sx={{ padding: 0, flex: 1, overflow: 'auto' }}><Channels /></TabPanel>
+      <TabPanel value="5" sx={{ padding: 0, flex: 1, overflow: 'auto' }}><Server /></TabPanel>
     </TabContext>
   )
 }

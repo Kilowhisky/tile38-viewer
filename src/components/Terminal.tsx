@@ -17,7 +17,7 @@ export function Terminal() {
               style={{
                 backgroundColor: theme.base00,
                 color: theme.base0D
-              }}>{e.cmd}</pre>
+              }}>&gt;&nbsp;{e.cmd}</pre>
           } else {
             return <JSONTree key={e.id} data={e.cmd} hideRoot={true} theme={theme} />
           }
