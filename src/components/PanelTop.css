@@ -1,0 +1,29 @@
+.tablist-container {
+  display: flex;
+  height: 48px;
+  align-items: center;
+  .tablist-title {
+    display: flex;
+    align-items: center;
+    padding-right: 5px;
+    img {
+      width: 25px;
+      vertical-align: middle;
+      margin: 3px 7px;
+    }
+    span {
+      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+      font-weight: 500;
+      font-size: 1.25rem;
+      line-height: 1.6;
+      letter-spacing: 0.0075em;
+    }
+  }
+}
+
+.tab-panel {
+  padding: 0 !important;
+  flex: 1;
+  overflow: auto;
+  position: relative;
+}

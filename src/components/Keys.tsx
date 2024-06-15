@@ -16,6 +16,7 @@ import './Keys.css';
 import { HumanFileSize } from './HumanFileSize';
 import { KeyItemList } from './KeyItemList';
 import { useKeyStore } from './Keys.store';
+import { KeyItemMenu } from './KeyItemMenu';
 
 // Based on this: https://mui.com/material-ui/react-accordion/
 
@@ -75,6 +76,9 @@ export default function Keys() {
           <AccordionSummary className='key-summary'>
             <span>{k.key}</span>
             <div className='chip-container'>
+              <div className='chip-block'>
+                <KeyItemMenu itemKey={k.key} />
+              </div>
               <div className='chip-block'>
                 <StatChip enabled={!!k.stats.num_strings} title='# STRINGs' >
                   <span><FormatQuoteRoundedIcon />{k.stats.num_strings}</span>

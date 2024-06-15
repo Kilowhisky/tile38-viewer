@@ -1,7 +1,8 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Box, IconButton, Tab } from "@mui/material";
+import { Box, IconButton, Tab, Typography } from "@mui/material";
 import { Panel, usePanelTopStore } from "./PanelTop.store";
 import CloseIcon from '@mui/icons-material/Close';
+import './PanelTop.css';
 
 
 export function PanelTop() {
@@ -17,31 +18,38 @@ export function PanelTop() {
 
   return (
     <TabContext value={focusPanelId}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <TabList onChange={(_, x) => focus(x)}>
+      <div className="tablist-container">
+        <div className="tablist-title" >
+          <img src="/logo.svg" />
+          <span>Tile38 Viewer</span>
+        </div>
+        <TabList onChange={(_, x) => focus(x)} >
           {panels.map((p) => (
-            <Tab
+            <Tab            
               key={p.id}
               value={p.id}
               label={p.closable ? (
                 <span>
                   {p.label}
                   <IconButton
+                    sx={{
+                      fontSize: '1rem',
+                      padding: 0,
+                      marginLeft: '5px'
+                    }}
+                    size="small"
                     component="div"
                     onClick={(e) => handleTabClose(e, p)}>
-                    <CloseIcon />
+                    <CloseIcon fontSize="inherit" />
                   </IconButton>
                 </span>
               ) : p.label}
             />
           ))}
         </TabList>
-      </Box>
+      </div>
       {panels.map(p => (
-        <TabPanel
-          key={p.id}
-          value={p.id}
-          sx={{ padding: 0, flex: 1, overflow: 'auto' }}>
+        <TabPanel key={p.id} value={p.id} className="tab-panel">
           {p.component}
         </TabPanel>
       ))}

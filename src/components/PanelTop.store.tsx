@@ -24,7 +24,7 @@ export const usePanelTopStore = create<PanelTopState>((set, get) => ({
     id: 'map',
     label: 'Map',
     closable: false,
-    component: MapView()
+    component: <MapView />
   }],
   addPanel(panel: Panel, focus: boolean = true) {
     set({

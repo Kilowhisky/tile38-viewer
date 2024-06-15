@@ -29,18 +29,15 @@ export default function App() {
       <ToastContainer />
       {!tile38.connection && <ConnectionManager onConnect={tile38.setConnection} />}
       {tile38.connection &&
-        <>
-          <Header />
-          <PanelGroup direction="vertical" className='panel-container'>
-            <Panel className='panel-top' minSize={10}>
-              <PanelTop />
-            </Panel>
-            <PanelResizeHandle className='panel-handle' />
-            <Panel className='panel-bottom' minSize={15}>
-              <PanelBottom />
-            </Panel>
-          </PanelGroup>
-        </>}
+        <PanelGroup direction="vertical" className='panel-container'>
+          <Panel className='panel-top' minSize={10}>
+            <PanelTop />
+          </Panel>
+          <PanelResizeHandle className='panel-handle' />
+          <Panel className='panel-bottom' minSize={15}>
+            <PanelBottom />
+          </Panel>
+        </PanelGroup>}
     </ThemeProvider>
   )
 }
