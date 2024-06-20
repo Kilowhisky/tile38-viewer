@@ -1,5 +1,5 @@
 import { ConnectionInfo } from "../components/Connection";
-import { PingResponse, CmdResponse, CountResponse, StatsResponse } from "./tile38Connection.models";
+import { PingResponse, CmdResponse, CountResponse, StatsResponse, ObjectResponse } from "./tile38Connection.models";
 
 export class Tile38Connection {
   ready = false;
@@ -31,6 +31,10 @@ export class Tile38Connection {
     return await this._makeRequest<StatsResponse>(`STATS ${keys.join(' ')}`)
   }
 
+  async get(key: string, id: string, type: 'OBJECT' | 'POINT' | 'BOUNDS'): Promise<ObjectResponse> {
+    return await this._makeRequest<ObjectResponse>(`GET ${key} ${id} ${type}`)
+  }
+
   private async _makeRequest<RType extends CmdResponse>(command: string): Promise<RType> {
     const request: Request = new Request(this._info.address, {
       method: 'POST',
@@ -43,17 +47,19 @@ export class Tile38Connection {
       request.headers.set("Authorization", this._info.password);
     }
 
-    const response = await fetch(request);
-    const result = await response.text();
-    if (!response.ok) {
-      console.error('Tile38 sent bad response', result);
+    try {
+      const response = await fetch(request);
+      const result = await response.text();
+      if (response.ok) {
+        return JSON.parse(result);
+      }
+      throw new Error(`Bad result returned from Til38: ${result}`);
+    } catch (err) {
       return {
         ok: false,
         elapsed: "0µs",
-        err: `Tile38 sent bad response: ${result}`
+        error: err
       } as RType
     }
-
-    return JSON.parse(result);
   }
 }

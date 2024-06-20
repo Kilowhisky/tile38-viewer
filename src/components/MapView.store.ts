@@ -7,6 +7,7 @@ export interface MapViewState {
   zoom?: number
   zoomOnSelect: boolean
   items: KeyData[]
+  apiKey: string
   addItem: (item: KeyData) => unknown;
   removeItem: (item: KeyData) => unknown;
   setCenter: (latlng: google.maps.LatLngLiteral) => unknown;
@@ -17,6 +18,7 @@ export interface MapViewState {
 export const useMapViewStore = create<MapViewState>((set, get) => ({
   items: [],
   zoomOnSelect: true,
+  apiKey: '',
   addItem(item) {
     const { items } = get();
     if (!items.includes(item)) {

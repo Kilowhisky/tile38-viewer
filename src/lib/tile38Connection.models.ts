@@ -1,8 +1,10 @@
-import { Geometry } from "geojson"
+import { Feature, FeatureCollection, Geometry } from "geojson"
+
+export type Tile38Object = string | Geometry | FeatureCollection | Feature
 
 export interface CmdResponse {
   ok: boolean
-  err?: string
+  error?: string
   elapsed: string
 }
 
@@ -41,10 +43,14 @@ export interface StatsResponse extends CmdResponse {
 export interface ScanObject {
   id: string
   fields?: Array<string | number>
-  object: string | Geometry
+  object: Tile38Object
 }
 
 export interface ScanObjectResponse extends CmdResponse, PagingResponse  {
   objects: Array<ScanObject>
   fields?: string[]
+}
+
+export interface ObjectResponse extends CmdResponse {
+  object: Tile38Object
 }

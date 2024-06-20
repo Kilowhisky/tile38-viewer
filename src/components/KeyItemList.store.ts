@@ -1,18 +1,16 @@
 import { StoreApi, UseBoundStore, create, useStore } from "zustand";
 import { useTile38 } from "../lib/tile38Connection.store";
 import { isString } from "../lib/stringHelpers";
-import { CountResponse, ScanObjectResponse } from "../lib/tile38Connection.models";
+import { CountResponse, ScanObjectResponse, Tile38Object } from "../lib/tile38Connection.models";
 import { unique } from "../lib/arrayHelpers";
 import { Feature, FeatureCollection, Geometry } from "geojson";
 import { feature, featureCollection } from "@turf/helpers";
-
-export type KeyDataObject = string | Geometry | FeatureCollection | Feature
 
 export interface KeyData {
   key: string
   id: string
   type: string
-  object: KeyDataObject
+  object: Tile38Object
   fields: Array<string | number>
 }
 

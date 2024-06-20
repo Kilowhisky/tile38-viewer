@@ -16,15 +16,19 @@ export interface ConnectionProps {
 }
 
 export function Connection({ connection, onChange, onSubmit }: ConnectionProps) {
-  const [connecting, setConnecting] = useState(false)
+  const [connecting, setConnecting] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   return (
-    <form onSubmit={e => {
+    <form onSubmit={async e => {
       e.preventDefault();
-      setConnecting(true)
-      onSubmit(connection).finally(() => {
-        setConnecting(false)
-      })
+
+      setConnecting(true);
+      setHasError(false);
+
+      const success = await onSubmit(connection);
+      setHasError(!success);
+      setConnecting(false);
     }}>
       <Grid container spacing={2} alignItems={'center'} >
         <Grid item sm={5}>
@@ -33,6 +37,7 @@ export function Connection({ connection, onChange, onSubmit }: ConnectionProps) 
             fullWidth
             label="Address:Port"
             placeholder="x.x.x.x:9851"
+            error={hasError}
             value={connection.address}
             onChange={(e) => onChange({
               id: connection.id,
@@ -46,6 +51,7 @@ export function Connection({ connection, onChange, onSubmit }: ConnectionProps) 
             fullWidth
             label="Password"
             type="password"
+            error={hasError}
             value={connection.password}
             onChange={(e) => onChange({
               id: connection.id,
