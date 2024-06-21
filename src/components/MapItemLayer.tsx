@@ -1,17 +1,23 @@
-import { useMap } from "@vis.gl/react-google-maps";
-import { GoogleMapsOverlay } from "@deck.gl/google-maps";
 import { useMemo, useEffect } from "react";
-import { useMapViewStore } from "./MapView.store";
-import { GeoJsonLayer } from "@deck.gl/layers";
+import { useMapStore } from "./Map.store";
+import { GeoJsonLayer } from "@deck.gl/layers/typed";
+import { LeafletLayer } from 'deck.gl-leaflet';
 import bbox from "@turf/bbox";
 import { GetFeatureCollection } from "./KeyItemList.store";
 import uniqolor from 'uniqolor';
+import { LatLngBounds } from "leaflet";
+import { MapView } from "@deck.gl/core/typed";
+import { useMap } from "react-leaflet";
 
-export function MapItemOverlay() {
+export function MapItemLayer() {
   const map = useMap();
-  const deck = useMemo(() => new GoogleMapsOverlay({ interleaved: true }), []);
-  const items = useMapViewStore(x => x.items);
-  const zoomOnSelect = useMapViewStore(x => x.zoomOnSelect);
+  const items = useMapStore(x => x.items);
+  const zoomOnSelect = useMapStore(x => x.zoomOnSelect);
+  const deck = useMemo(() => new LeafletLayer({
+    views: [new MapView({ repeat: true })]
+  }), []);
+
+
   const layers = useMemo(() => {
     return items.map(key => {
       return new GeoJsonLayer({
@@ -35,18 +41,21 @@ export function MapItemOverlay() {
       const [west, south, east, north] = bbox(
         GetFeatureCollection(...items.map(x => x.object))
       );
-      map.fitBounds({ west, south, east, north }, 20);
-
-      // panToBounds likes to zoom in way too far, force it to normal zoom
-      if (map.getZoom()! > 15) {
-        map.setZoom(15)
-      }
+      const bounds = new LatLngBounds(
+        { lat: south, lng: west },
+        { lat: north, lng: east }
+      )
+      map.fitBounds(bounds, {
+        maxZoom: 15
+      });
     }
   }, [items, map, zoomOnSelect]);
 
   useEffect(() => {
-    deck.setMap(map);
-    return () => deck.setMap(null);
+    map.addLayer(deck);
+    return () => {
+      map.removeLayer(deck);
+    }
   }, [map, deck]);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { create } from "zustand";
-import { MapView } from "./MapView";
+import { Map } from "./Map";
 import { removeItem } from "../lib/arrayHelpers";
 
 export interface Panel {
@@ -24,7 +24,7 @@ export const usePanelTopStore = create<PanelTopState>((set, get) => ({
     id: 'map',
     label: 'Map',
     closable: false,
-    component: <MapView />
+    component: <Map />
   }],
   addPanel(panel: Panel, focus: boolean = true) {
     set({

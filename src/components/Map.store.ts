@@ -1,21 +1,20 @@
 import { create } from "zustand";
 import { removeItem } from "../lib/arrayHelpers";
 import { KeyData } from "./KeyItemList.store";
+import { LatLngExpression } from "leaflet";
 
-export interface MapViewState {
-  center?: google.maps.LatLngLiteral
+export interface MapState {
+  center?: LatLngExpression | undefined
   zoom?: number
   zoomOnSelect: boolean
   items: KeyData[]
   apiKey: string
   addItem: (item: KeyData) => unknown;
   removeItem: (item: KeyData) => unknown;
-  setCenter: (latlng: google.maps.LatLngLiteral) => unknown;
-  setZoom: (zoom: number) => unknown
-  setKey: <T = MapViewState>(key: keyof T, value: T[keyof T]) => unknown;
+  setKey: <T = MapState>(key: keyof T, value: T[keyof T]) => unknown;
 }
 
-export const useMapViewStore = create<MapViewState>((set, get) => ({
+export const useMapStore = create<MapState>((set, get) => ({
   items: [],
   zoomOnSelect: true,
   apiKey: '',
@@ -32,12 +31,6 @@ export const useMapViewStore = create<MapViewState>((set, get) => ({
     set({
       items: [...removeItem(items, item)],
     })
-  },
-  setCenter(center) {
-    set({ center })
-  },
-  setZoom(zoom) {
-    set({ zoom })
   },
   setKey(key, value) {
     set({ [key]: value });

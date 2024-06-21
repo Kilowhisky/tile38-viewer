@@ -113,7 +113,7 @@ export function useKeyItemStore<T>(key: string, selector?: (state: KeyItemState)
   return useStore(stores[key], selector!);
 }
 
-export function GetFeatureCollection(...items: KeyDataObject[]): FeatureCollection {
+export function GetFeatureCollection(...items: Tile38Object[]): FeatureCollection {
   return featureCollection(
     items.reduce((out, item) => {
       if ((item as FeatureCollection).type == "FeatureCollection") {

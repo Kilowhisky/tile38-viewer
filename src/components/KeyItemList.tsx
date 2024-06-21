@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,7 +10,7 @@ import { KeyData, useKeyItemStore } from "./KeyItemList.store";
 import { LoadingButton } from "@mui/lab";
 import { usePanelTopStore } from "./PanelTop.store";
 import { KeyItem, KeyItemView } from "./KeyItemView";
-import { useMapViewStore } from "./MapView.store";
+import { useMapStore } from "./Map.store";
 
 // Based on this: https://mui.com/material-ui/react-table/
 // -------------------------------------------------------------------------
@@ -25,9 +25,9 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
   const data = useKeyItemStore(itemKey, x => x.data);
   const total = useKeyItemStore(itemKey, x => x.total);
   const addTopPanel = usePanelTopStore(x => x.addPanel);
-  const mapItems = useMapViewStore(x => x.items);
-  const mapItemAdd = useMapViewStore(x => x.addItem);
-  const mapItemRemove = useMapViewStore(x => x.removeItem);
+  const mapItems = useMapStore(x => x.items);
+  const mapItemAdd = useMapStore(x => x.addItem);
+  const mapItemRemove = useMapStore(x => x.removeItem);
 
   useEffect(() => {
     if (!data.length) {

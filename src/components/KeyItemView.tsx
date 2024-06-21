@@ -1,11 +1,11 @@
 import { JSONTree } from "react-json-tree";
 import theme from 'react-base16-styling/src/themes/apathy';
-import { Geometry } from "geojson";
+import { Tile38Object } from "../lib/tile38Connection.models";
 
 export interface KeyItem {
   key: string
   id: string
-  object: string | Geometry
+  object: Tile38Object
   fields?: Record<string, string | number>
 }
 
