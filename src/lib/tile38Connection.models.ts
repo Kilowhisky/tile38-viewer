@@ -3,6 +3,7 @@ import { Feature, FeatureCollection, Geometry } from "geojson"
 export type Tile38Object = string | Geometry | FeatureCollection | Feature
 
 export interface CmdResponse {
+  command: string
   ok: boolean
   error?: string
   elapsed: string

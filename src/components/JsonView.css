@@ -1,0 +1,14 @@
+.json-view {
+  position: relative;
+  padding: 5px;
+
+  > button {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  > ul {
+    margin: 0 !important;
+  }
+}

@@ -1,6 +1,5 @@
-import { JSONTree } from "react-json-tree";
-import theme from 'react-base16-styling/src/themes/apathy';
 import { Tile38Object } from "../lib/tile38Connection.models";
+import { JsonView } from "./JsonView";
 
 export interface KeyItem {
   key: string
@@ -10,10 +9,5 @@ export interface KeyItem {
 }
 
 export function KeyItemView({ item }: { item: KeyItem }) {
-  return <JSONTree
-    data={item}
-    hideRoot={true}
-    theme={theme}
-    shouldExpandNodeInitially={(kp, d, l) => l < 3}
-  />
+  return <JsonView data={item}  />
 }

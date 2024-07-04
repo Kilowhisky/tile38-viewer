@@ -4,7 +4,7 @@ import { useTile38 } from '../lib/tile38Connection.store'
 
 interface CommandEntry {
   id: string
-  cmd: string | CmdResponse
+  cmd: CmdResponse
 }
 
 interface TerminalState {
@@ -21,10 +21,6 @@ export const useTerminalStore = create<TerminalState>()((set, get) => {
 
     async execute(cmd: string) {
       const tile38 = useTile38.getState().connection!;
-      const cmdEntered = {
-        id: crypto.randomUUID(),
-        cmd
-      }
       const entry = {
         id: crypto.randomUUID(),
         cmd: await tile38.raw(cmd)
@@ -33,7 +29,6 @@ export const useTerminalStore = create<TerminalState>()((set, get) => {
         cmd: '',
         history: [
           ...get().history,
-          cmdEntered,
           entry
         ]
       }))

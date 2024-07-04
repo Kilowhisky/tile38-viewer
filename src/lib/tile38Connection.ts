@@ -51,11 +51,15 @@ export class Tile38Connection {
       const response = await fetch(request);
       const result = await response.text();
       if (response.ok) {
-        return JSON.parse(result);
+        return {
+          command,
+          ...JSON.parse(result)
+        }
       }
       throw new Error(`Bad result returned from Til38: ${result}`);
     } catch (err) {
       return {
+        command,
         ok: false,
         elapsed: "0µs",
         error: err
