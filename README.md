@@ -1,6 +1,6 @@
-# tile38-viewer
+# Tile38 Viewer
 
-An Electron application with React and TypeScript
+Tile38 Viewer is a utility application for viewing and interacting with data in a [Tile38](https://tile38.com) server
 
 ## Recommended IDE Setup
 
