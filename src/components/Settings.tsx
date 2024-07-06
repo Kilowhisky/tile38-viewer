@@ -6,7 +6,7 @@ export function Settings() {
   const setKey = useMapStore(x => x.setKey);
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="md">
       <h1>Settings</h1>
       <h3>Map</h3>
       <FormControlLabel

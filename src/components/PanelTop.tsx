@@ -3,6 +3,7 @@ import { IconButton, Tab } from "@mui/material";
 import { Panel, usePanelTopStore } from "./PanelTop.store";
 import CloseIcon from '@mui/icons-material/Close';
 import SettingsIcon from '@mui/icons-material/Settings';
+import PowerOffIcon from '@mui/icons-material/PowerOff';
 import './PanelTop.css';
 import { useCallback } from "react";
 import { Settings } from "./Settings";
@@ -62,8 +63,10 @@ export function PanelTop() {
         </TabList>
         <div className="tablist-right">
           <IconButton
-            color='inherit'
-            sx={{ backgroundColor: 'white' }}
+            title="Disconnect"
+            onClick={() => location.reload()}
+          ><PowerOffIcon /> </IconButton>
+          <IconButton
             title="Settings"
             onClick={() => addSettingsPanel()}
           ><SettingsIcon /> </IconButton>
