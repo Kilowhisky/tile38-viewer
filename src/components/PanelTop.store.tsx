@@ -12,7 +12,7 @@ export interface Panel {
 
 export interface PanelTopState {
   panels: Panel[]
-  addPanel: (panel: Panel, focus?: boolean) => unknown
+  addPanel: (panel: Panel, focus?: boolean) => boolean
   focusedPanelId: string
   focusPanel: (id: string) => unknown
   removePanel: (panel: Panel) => unknown
@@ -26,11 +26,16 @@ export const usePanelTopStore = create<PanelTopState>((set, get) => ({
     closable: false,
     component: <Map />
   }],
-  addPanel(panel: Panel, focus: boolean = true) {
-    set({
-      panels: [...get().panels, panel],
-      focusedPanelId: focus ? panel.id : get().focusedPanelId
-    })
+  addPanel(panel: Panel, focus: boolean = true): boolean {
+    const panels = get().panels;
+    if (panels.some(x => x.id == panel.id) == false) {
+      set({
+        panels: [...panels, panel],
+        focusedPanelId: focus ? panel.id : get().focusedPanelId
+      })
+      return true;
+    }
+    return false;
   },
   focusPanel(id: string) {
     set({

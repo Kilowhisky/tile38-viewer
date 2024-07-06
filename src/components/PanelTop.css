@@ -21,6 +21,14 @@
       letter-spacing: 0.0075em;
     }
   }
+
+  .MuiTabs-root {
+    flex-grow: 1;
+  }
+
+  .tablist-right {
+    
+  }
 }
 
 .tab-panel {
