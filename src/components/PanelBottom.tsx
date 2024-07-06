@@ -3,15 +3,12 @@ import { Box, Tab } from "@mui/material";
 import { useState } from "react";
 import { Terminal } from "./Terminal";
 import Keys from "./Keys";
-import { Hooks } from "./Hooks";
-import { Channels } from "./Channels";
-import { Server } from "./Server";
 
 
 export function PanelBottom() {
   const [value, setValue] = useState('1');
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 

@@ -68,7 +68,7 @@ export function KeyItemMenu({ itemKey }: { itemKey: string }) {
             color="primary"
             value={sort}
             exclusive
-            onChange={(e, v) => {
+            onChange={(_, v) => {
               setKeyItemStore('wherein', v);
               load()
             }} >

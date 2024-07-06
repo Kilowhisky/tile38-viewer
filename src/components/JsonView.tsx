@@ -20,7 +20,7 @@ export function JsonView({ data, ...props }: { data: unknown }) {
         hideRoot={true}
         theme={theme}
         invertTheme={true}
-        shouldExpandNodeInitially={(kp, d, l) => l < 3}
+        shouldExpandNodeInitially={(_, __, l) => l < 3}
       />
     </div>
   )

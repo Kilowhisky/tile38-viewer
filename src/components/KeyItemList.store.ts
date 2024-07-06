@@ -27,7 +27,7 @@ export interface KeyItemState {
   whereIn: string;
   limit: number;
   reset: () => unknown;
-  load: (append: boolean) => Promise<unknown>;
+  load: (append?: boolean) => Promise<unknown>;
   set: <T = KeyItemState>(field: keyof T, value: T[keyof T]) => unknown;
 }
 

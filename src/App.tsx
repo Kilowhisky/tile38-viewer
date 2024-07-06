@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import './App.css'
 import ConnectionManager from './components/ConnectionManager'
 import { ToastContainer } from 'react-toastify';
-import Header from './components/Header';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme, useMediaQuery } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';

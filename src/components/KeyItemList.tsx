@@ -87,7 +87,7 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
                   .filter(x => x.type.toLowerCase() != "string")
                   .every(d => mapItems.includes(d))
                 }
-                onChange={(e, c) => data
+                onChange={(_, c) => data
                   .filter(x => x.type.toLowerCase() != "string")
                   .forEach(y => onRowToggle(y, c))
                 }
@@ -134,7 +134,7 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
           <TableRow>
             <TableCell colSpan={fields?.length + 4}>
               <span style={{ paddingRight: 5 }}>Showing {data.length} out of {total}</span>
-              {data.length !== total && <LoadingButton loading={loading} onClick={load}>Load 50 More</LoadingButton>}
+              {data.length !== total && <LoadingButton loading={loading} onClick={() => load()}>Load 50 More</LoadingButton>}
             </TableCell>
           </TableRow>
         </TableFooter>
