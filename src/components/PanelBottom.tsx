@@ -23,7 +23,7 @@ export function PanelBottom() {
 
   return (
     <TabContext value={value}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box sx={{ borderBottom: 1, borderTop: 1, borderColor: 'divider' }}>
         <TabList onChange={handleChange} sx={{ minHeight: 30 }}>
           <Tab label="Terminal" value="1" sx={{ padding: '10px 15px', minHeight: 30 }} />
           <Tab label="Keys" value="2" sx={{ padding: '10px 15px', minHeight: 30 }} />
