@@ -7,6 +7,7 @@ import PowerOffIcon from '@mui/icons-material/PowerOff';
 import './PanelTop.css';
 import { useCallback } from "react";
 import { Settings } from "./Settings";
+import logo from '../../../../resources/logo.svg?asset';
 
 
 export function PanelTop() {
@@ -34,7 +35,7 @@ export function PanelTop() {
     <TabContext value={focusPanelId}>
       <div className="tablist-container">
         <div className="tablist-title" >
-          <img src="/logo.svg" />
+          <img src={logo} />
           <span>Tile38 Viewer</span>
         </div>
         <TabList onChange={(_, x) => focus(x)} >
