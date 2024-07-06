@@ -12,6 +12,7 @@ interface TerminalState {
   history: CommandEntry[]
   execute: (cmd: string) => Promise<CommandEntry>
   setCmd: (cmd: string) => unknown
+  clear: () => unknown
 }
 
 export const useTerminalStore = create<TerminalState>()((set, get) => {
@@ -37,7 +38,11 @@ export const useTerminalStore = create<TerminalState>()((set, get) => {
 
     setCmd(cmd: string) {
       set({ cmd })
-    }
+    },
+
+    clear() {
+      set({ history: [] })
+    },
 
   }
 })

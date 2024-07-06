@@ -17,6 +17,15 @@
     }
   }
 
+  .cmd-container {
+    position: relative;
+    > button {
+      position: absolute;
+      right: 0;
+      top: 0.4em;
+    }
+  }
+
   .MuiTabPanel-root {
     padding: 0;
   }
