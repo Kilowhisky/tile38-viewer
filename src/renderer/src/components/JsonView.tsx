@@ -1,4 +1,4 @@
-import { IconButton } from "@mui/material";
+import { IconButton, useTheme } from "@mui/material";
 import { JSONTree } from "react-json-tree";
 import theme from 'react-base16-styling/src/themes/summerfruit';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
@@ -8,6 +8,8 @@ import './JsonView.css';
 
 
 export function JsonView({ data, ...props }: { data: unknown }) {
+  const isDarkTheme = useTheme().palette.mode === 'dark';
+
   function copy() {
     navigator.clipboard.writeText(JSON.stringify(data, null, 2));
     toast.success('Copied to Clipboard');
@@ -19,7 +21,7 @@ export function JsonView({ data, ...props }: { data: unknown }) {
         data={data}
         hideRoot={true}
         theme={theme}
-        invertTheme={true}
+        invertTheme={!isDarkTheme}
         shouldExpandNodeInitially={(_, __, l) => l < 3}
       />
     </div>
