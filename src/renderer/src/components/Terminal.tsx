@@ -29,6 +29,9 @@ export function Terminal() {
               e.preventDefault();
             }
           }}
+          InputProps={{
+            disableUnderline: true
+          }}
         />
         <IconButton color="error" title="Clear Terminal" onClick={clear}>
           <DeleteForeverIcon />

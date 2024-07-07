@@ -1,5 +1,5 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { IconButton, Tab } from "@mui/material";
+import { IconButton, Tab, useTheme } from "@mui/material";
 import { Panel, usePanelTopStore } from "./PanelTop.store";
 import CloseIcon from '@mui/icons-material/Close';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -16,6 +16,7 @@ export function PanelTop() {
   const focus = usePanelTopStore(x => x.focusPanel);
   const close = usePanelTopStore(x => x.removePanel);
   const addPanel = usePanelTopStore(x => x.addPanel);
+  const theme = useTheme();
 
   function handleTabClose(e: React.MouseEvent<HTMLDivElement, MouseEvent>, panel: Panel) {
     e.stopPropagation();
@@ -33,7 +34,7 @@ export function PanelTop() {
 
   return (
     <TabContext value={focusPanelId}>
-      <div className="tablist-container">
+      <div className="tablist-container" style={{ borderBottomColor: theme.palette.divider }}>
         <div className="tablist-title" >
           <img src={logo} />
           <span>Tile38 Viewer</span>
