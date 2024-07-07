@@ -115,4 +115,5 @@ function StatChip({ enabled, children, title }: { enabled: boolean, children: Re
       </Tooltip>
     )
   }
+  return undefined;
 }

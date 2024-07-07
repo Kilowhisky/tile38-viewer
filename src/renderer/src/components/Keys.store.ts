@@ -25,7 +25,7 @@ export const useKeyStore = create<KeysState>((set, get) => ({
     const tile38 = useTile38.getState().connection!;
     const response = await tile38.raw<KeysResponse>("KEYS *");
     const keysSorted = response.keys.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
-    const newKeys = [];
+    const newKeys: KeySummary[] = [];
 
     for (let i = 0; i < keysSorted.length; i++) {
       const key = keysSorted[i];

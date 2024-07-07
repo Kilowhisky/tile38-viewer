@@ -39,6 +39,7 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
     if (count > 0) {
       return <TableCell colSpan={count} />
     }
+    return undefined;
   }
 
   function onRowClick(row: KeyData) {
