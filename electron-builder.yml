@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: tile38-viewer
+appId: com.tile38-viewer.app
+productName: "Tile38 Viewer"
 directories:
   buildResources: build
 files:
