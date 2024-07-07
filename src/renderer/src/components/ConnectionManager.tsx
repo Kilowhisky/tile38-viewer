@@ -47,7 +47,7 @@ export default function ConnectionManager({ onConnect }: ConnectionManagerProps)
         </DialogContentText>
         <Divider sx={{ m: 2 }} />
         <Box>
-          {connections.map(c => <Connection connection={c} onChange={connectionChange} onSubmit={connect} />)}
+          {connections.map(c => <Connection key={c.id} connection={c} onChange={connectionChange} onSubmit={connect} />)}
           <Connection connection={newConnection} onChange={setNewConnection} onSubmit={connect} />
         </Box>
       </DialogContent>
