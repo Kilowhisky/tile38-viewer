@@ -7,7 +7,7 @@ import PowerOffIcon from '@mui/icons-material/PowerOff';
 import './PanelTop.css';
 import { useCallback } from "react";
 import { Settings } from "./Settings";
-import logo from '../../../../resources/logo.svg?asset';
+import logo from '../assets/logo.svg';
 
 
 export function PanelTop() {
