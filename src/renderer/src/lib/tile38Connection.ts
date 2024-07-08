@@ -11,7 +11,7 @@ export class Tile38Connection {
   }
 
   async connect(): Promise<boolean> {
-    return this.ready = await this.ping();
+    return (this.ready = (await this.raw("SERVER")).ok)
   }
 
   async ping(): Promise<boolean> {
