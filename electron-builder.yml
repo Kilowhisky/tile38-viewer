@@ -34,6 +34,6 @@ linux:
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
-publish: "never"  # Publish is done via workflows
+publish: null  # Publish is done via workflows
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
