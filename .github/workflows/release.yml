@@ -54,3 +54,4 @@ jobs:
             dist/*.blockmap
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
