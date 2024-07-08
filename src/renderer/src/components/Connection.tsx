@@ -31,7 +31,7 @@ export function Connection({ connection, onChange, onSubmit }: ConnectionProps) 
       setConnecting(false);
     }}>
       <Grid container spacing={2} alignItems={'center'} >
-        <Grid item sm={5}>
+        <Grid item xs={12} sm={12}>
           <TextField
             required
             fullWidth
@@ -46,7 +46,7 @@ export function Connection({ connection, onChange, onSubmit }: ConnectionProps) 
             })}
           />
         </Grid>
-        <Grid item sm={5} >
+        <Grid item xs={12} sm={9} >
           <TextField
             fullWidth
             label="Password"
