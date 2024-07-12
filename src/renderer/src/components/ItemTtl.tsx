@@ -15,5 +15,13 @@ export function ItemTtl({ itemKey, id }: { itemKey: string, id: string }) {
     load(itemKey, id);
   }, [tile38, itemKey, id]);
 
-  return <span>{ttl}</span>
+  if (ttl == -1) {
+    return '∞';
+  }
+
+  const hours = (ttl / 3600).toFixed();
+  const minutes = (ttl % 3600 / 60).toFixed().padStart(2, '0');
+  const seconds = (ttl % 60).toFixed().padStart(2, '0');
+
+  return `${hours}:${minutes}:${seconds}`;
 }

@@ -22,12 +22,22 @@
     }
   }
 
+  .tablist-item {
+    .tablist-item-name {
+      max-width: 5em;
+      display: inline-block;
+      overflow: hidden;
+      text-wrap: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
   .MuiTabs-root {
     flex-grow: 1;
   }
 
   .tablist-right {
-    
+
   }
 }
 

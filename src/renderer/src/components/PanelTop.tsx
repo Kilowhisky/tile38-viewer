@@ -45,8 +45,8 @@ export function PanelTop() {
               key={p.id}
               value={p.id}
               label={p.closable ? (
-                <span>
-                  {p.label}
+                <span className="tablist-item">
+                  <span className="tablist-item-name">{p.label}</span>
                   <IconButton
                     sx={{
                       fontSize: '1rem',

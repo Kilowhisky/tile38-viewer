@@ -1,5 +1,25 @@
 .keys-container {
   overflow-y: auto;
+
+  .keys-header {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    > * {
+      margin-right: 15px;
+    }
+  }
+
+  .load-more {
+    text-align: center;
+    padding: 5px 0;
+    > * {
+      margin: 0 10px;
+    }
+    input {
+      text-align: center;
+    }
+  }
 }
 
 .MuiAccordion-root:not(:first-child) {
@@ -23,7 +43,7 @@
   flex-basis: 50%;
   display: flex;
   align-items: center;
-  justify-content: right;
+  justify-content: space-between;
 
   .chip-block {
     display: flex;
@@ -33,7 +53,7 @@
     &:first-child {
       padding-left: 0;
     }
-    
+
     &:last-child {
       padding-right: 0;
     }

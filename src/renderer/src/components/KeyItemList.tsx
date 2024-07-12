@@ -72,7 +72,17 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
 
   return (
     <TableContainer>
-      <Table size="small" stickyHeader sx={{ borderCollapse: 'separate', tableLayout: 'fixed' }}>
+      <Table size="small" stickyHeader sx={{
+        borderCollapse: 'separate',
+        tableLayout: 'auto',
+        '& .cell-text' : {
+          textWrap: 'nowrap',
+          textOverflow: 'ellipsis',
+          maxWidth: '10em',
+          display: 'table-cell',
+          overflow: 'hidden'
+        }
+      }}>
         <TableHead>
           <TableRow>
             <TableCell
@@ -120,12 +130,14 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
                   component="button"
                   underline="hover"
                   onClick={() => onRowClick(r)}
-                >{r.id}</Link>
+                ><span className="cell-text">{r.id}</span></Link>
               </TableCell>
-              <TableCell>{r.type}</TableCell>
-              <TableCell><ItemTtl itemKey={itemKey} id={r.id} /></TableCell>
+              <TableCell><span className="cell-text">{r.type}</span></TableCell>
+              <TableCell><span className="cell-text"><ItemTtl itemKey={itemKey} id={r.id} /></span></TableCell>
               {r.fields.map((f, i) => (
-                <TableCell key={`${itemKey}_field_${fields[i] || i}`}>{f}</TableCell>
+                <TableCell key={`${itemKey}_field_${fields[i] || i}`}>
+                  <span className="cell-text">{f}</span>
+                </TableCell>
               ))}
               {emptyCells(fields.length - r.fields.length)}
             </TableRow>
