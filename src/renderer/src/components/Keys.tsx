@@ -19,7 +19,7 @@ import { KeySummary, useKeyStore } from './Keys.store';
 import { KeyItemMenu } from './KeyItemMenu';
 import { KeyStats } from '@renderer/lib/tile38Connection.models';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import { useDebounce, useDebouncedCallback } from 'use-debounce';
+import { useDebouncedCallback } from 'use-debounce';
 
 // Based on this: https://mui.com/material-ui/react-accordion/
 
