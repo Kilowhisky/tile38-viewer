@@ -72,8 +72,6 @@ export default function Keys() {
   const moreToShow = keyCountShown < keys.length
   const loadDebounced = useDebouncedCallback(load, 300)
 
-  console.log(keyCountShown, keys.length)
-
   useEffect(() => {
     load();
   }, [])
