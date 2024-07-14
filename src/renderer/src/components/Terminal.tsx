@@ -13,8 +13,8 @@ export function Terminal() {
 
   return (
     <div className="terminal-container">
-      <div className="terminal">
-        {history.map(e => <JsonView key={e.id} data={e.cmd} />)}
+      <div id="terminal-history" className="terminal">
+        {[...history].reverse().map(e => <JsonView key={e.id} data={e.cmd} />)}
       </div>
       <div className="cmd-container">
         <TextField
@@ -25,7 +25,9 @@ export function Terminal() {
           onChange={x => setCmd(x.target.value)}
           onKeyDown={e => {
             if (e.key === "Enter") {
-              execute(cmd);
+              execute(cmd).then(() => {
+                document.getElementById('terminal-history')!.scrollTo({ top: 0 })
+              });
               e.preventDefault();
             }
           }}
