@@ -10,7 +10,7 @@ import PlaceTwoToneIcon from '@mui/icons-material/PlaceTwoTone';
 import HexagonTwoToneIcon from '@mui/icons-material/HexagonTwoTone';
 import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
 import NumbersIcon from '@mui/icons-material/Numbers';
-import { Button, CircularProgress, TextField, Tooltip } from '@mui/material';
+import { Button, CircularProgress, IconButton, TextField, Tooltip } from '@mui/material';
 import MemoryIcon from '@mui/icons-material/Memory';
 import './Keys.css';
 import { HumanFileSize } from './HumanFileSize';
@@ -20,6 +20,7 @@ import { KeyItemMenu } from './KeyItemMenu';
 import { KeyStats } from '@renderer/lib/tile38Connection.models';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { useDebouncedCallback } from 'use-debounce';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 // Based on this: https://mui.com/material-ui/react-accordion/
 
@@ -89,6 +90,7 @@ export default function Keys() {
             setPattern(e.target.value);
             loadDebounced();
           }} />
+          <IconButton title='refresh' onClick={() => load()}><RefreshIcon /></IconButton>
         {loading && <CircularProgress size="1em" />}
       </div>
       {keys.slice(0, keyCountShown).map(k => (
