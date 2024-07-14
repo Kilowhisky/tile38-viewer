@@ -23,6 +23,8 @@
   }
 
   .tablist-item {
+    display: flex;
+
     .tablist-item-name {
       max-width: 5em;
       display: inline-block;
