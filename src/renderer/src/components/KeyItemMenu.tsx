@@ -14,7 +14,7 @@ export function KeyItemMenu({ itemKey }: { itemKey: string }) {
   const whereIn = useKeyItemStore(itemKey, x => x.whereIn);
   const setKeyItemStore = useKeyItemStore(itemKey, x => x.set);
   const load = useKeyItemStore(itemKey, x => x.load);
-  const loadDebounced = useDebouncedCallback(load, 1000);
+  const loadDebounced = useDebouncedCallback(load.bind(false), 1000);
 
   function onOpenMenu(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchor(event.currentTarget)
@@ -69,8 +69,8 @@ export function KeyItemMenu({ itemKey }: { itemKey: string }) {
             value={sort}
             exclusive
             onChange={(_, v) => {
-              setKeyItemStore('wherein', v);
-              load()
+              setKeyItemStore('sort', v);
+              load(false)
             }} >
             <ToggleButton value="ASC"><ArrowUpwardIcon />ASC</ToggleButton>
             <ToggleButton value="DESC"><ArrowDownwardIcon />DESC</ToggleButton>
