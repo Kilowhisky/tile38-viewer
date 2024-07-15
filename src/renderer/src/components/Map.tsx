@@ -12,7 +12,16 @@ export function Map() {
   const zoom = useMapStore(x => x.zoom);
   const set = useMapStore(x => x.setKey);
   const [map, setMap] = useState<LeafletMap | null>();
-  const isDarkTheme = useTheme().palette.mode === 'dark';
+  const theme = useTheme();
+
+  useEffect(() => {
+    const classList = map?.getContainer().classList;
+    if (theme.palette.mode == 'dark') {
+      classList?.add('map-dark')
+    } else {
+      classList?.remove('map-dark')
+    }
+  }, [map, theme.palette.mode])
 
   useEffect(() => {
     map?.on('zoomend', e => set('zoom', e.target.getZoom()));
@@ -21,7 +30,7 @@ export function Map() {
 
   return <MapContainer
     ref={r => setMap(r)}
-    className={isDarkTheme ? 'map map-dark' : 'map'}
+    className={'map'}
     style={{ width: '100%', height: '100%' }}
     center={center || [37.0902, -95.7129]}
     zoom={zoom || 4} >

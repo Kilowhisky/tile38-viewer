@@ -5,9 +5,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PowerOffIcon from '@mui/icons-material/PowerOff';
 import './PanelTop.css';
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { Settings } from "./Settings";
 import logo from '../assets/logo.svg';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import { ThemeWrapperContext } from "./ThemeWrapper";
 
 
 export function PanelTop() {
@@ -17,6 +20,8 @@ export function PanelTop() {
   const close = usePanelTopStore(x => x.removePanel);
   const addPanel = usePanelTopStore(x => x.addPanel);
   const theme = useTheme();
+  const isDarkTheme = theme.palette.mode === 'dark';
+  const themeUtils = useContext(ThemeWrapperContext);
 
   function handleTabClose(e: React.MouseEvent<HTMLDivElement, MouseEvent>, panel: Panel) {
     e.stopPropagation();
@@ -64,6 +69,10 @@ export function PanelTop() {
           ))}
         </TabList>
         <div className="tablist-right">
+          {isDarkTheme ?
+            <IconButton title="Light Mode" onClick={() => themeUtils.toggleColorMode()}><LightModeIcon /></IconButton> :
+            <IconButton title="Dark Mode" onClick={() => themeUtils.toggleColorMode()}><DarkModeIcon /></IconButton>
+          }
           <IconButton
             title="Disconnect"
             onClick={() => location.reload()}
