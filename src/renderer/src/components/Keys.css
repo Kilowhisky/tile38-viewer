@@ -40,7 +40,7 @@
 }
 
 .chip-container {
-  flex-basis: 50%;
+  flex-basis: 30%;
   display: flex;
   align-items: center;
   justify-content: space-between;

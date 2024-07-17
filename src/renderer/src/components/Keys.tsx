@@ -16,7 +16,6 @@ import './Keys.css';
 import { HumanFileSize } from './HumanFileSize';
 import { KeyItemList } from './KeyItemList';
 import { KeySummary, useKeyStore } from './Keys.store';
-import { KeyItemMenu } from './KeyItemMenu';
 import { KeyStats } from '@renderer/lib/tile38Connection.models';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { useDebouncedCallback } from 'use-debounce';
@@ -152,9 +151,6 @@ function KeySummaryView({ summary }: { summary: KeySummary }) {
         <StatChip enabled={true} title='Count of Items in Key' >
           <span><NumbersIcon />{count || <CircularProgress size="0.75em" />}</span>
         </StatChip>
-      </div>
-      <div className='chip-block'>
-        <KeyItemMenu itemKey={summary.key} />
       </div>
     </div>
   </>
