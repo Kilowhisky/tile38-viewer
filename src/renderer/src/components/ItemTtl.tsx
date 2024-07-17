@@ -15,7 +15,7 @@ export function ItemTtl({ itemKey, id }: { itemKey: string, id: string }) {
     load(itemKey, id);
   }, [tile38, itemKey, id]);
 
-  if (ttl == -1) {
+  if (ttl == -1 || !ttl) {
     return '∞';
   }
 
