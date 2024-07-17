@@ -10,7 +10,7 @@ import PlaceTwoToneIcon from '@mui/icons-material/PlaceTwoTone';
 import HexagonTwoToneIcon from '@mui/icons-material/HexagonTwoTone';
 import FormatQuoteRoundedIcon from '@mui/icons-material/FormatQuoteRounded';
 import NumbersIcon from '@mui/icons-material/Numbers';
-import { Button, CircularProgress, IconButton, TextField, Tooltip } from '@mui/material';
+import { Button, CircularProgress, IconButton, Menu, MenuItem, TextField, Tooltip } from '@mui/material';
 import MemoryIcon from '@mui/icons-material/Memory';
 import './Keys.css';
 import { HumanFileSize } from './HumanFileSize';
@@ -60,18 +60,14 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 }));
 
 export default function Keys() {
-  const pattern = useKeyStore(x => x.pattern)
-  const setPattern = useKeyStore(x => x.setPattern)
   const keys = useKeyStore(x => x.keys)
   const keyCountShown = useKeyStore(x => x.keyCountShown)
   const setKeyCountShown = useKeyStore(x => x.setKeyCountShown)
   const load = useKeyStore(x => x.load)
-  const loading = useKeyStore(x => x.loading)
   const expanded = useKeyStore(x => x.expanded)
   const expand = useKeyStore(x => x.expand)
   const collapse = useKeyStore(x => x.collapse)
   const moreToShow = keyCountShown < keys.length
-  const loadDebounced = useDebouncedCallback(load, 300)
 
   useEffect(() => {
     load();
@@ -79,20 +75,6 @@ export default function Keys() {
 
   return (
     <div className='keys-container'>
-      <div className='keys-header'>
-        <FilterAltIcon />
-        <TextField
-          label="Match"
-          variant='outlined'
-          size='small'
-          value={pattern}
-          onChange={e => {
-            setPattern(e.target.value);
-            loadDebounced();
-          }} />
-          <IconButton title='refresh' onClick={() => load()}><RefreshIcon /></IconButton>
-        {loading && <CircularProgress size="1em" />}
-      </div>
       {keys.slice(0, keyCountShown).map(k => (
         <Accordion
           key={k.key}
@@ -104,7 +86,7 @@ export default function Keys() {
               unmountOnExit: true
             }
           }}
-          >
+        >
           <AccordionSummary className='key-summary'>
             <KeySummaryView summary={k} />
           </AccordionSummary>
@@ -176,4 +158,49 @@ function KeySummaryView({ summary }: { summary: KeySummary }) {
       </div>
     </div>
   </>
+}
+
+export function KeysMenu() {
+  const setPattern = useKeyStore(x => x.setPattern)
+  const load = useKeyStore(x => x.load)
+  const pattern = useKeyStore(x => x.pattern)
+  const loading = useKeyStore(x => x.loading)
+  const [anchor, setAnchor] = useState<HTMLButtonElement>()
+  const loadDebounced = useDebouncedCallback(load, 300)
+
+  function onOpenMenu(event: React.MouseEvent<HTMLButtonElement>) {
+    setAnchor(event.currentTarget)
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  return (
+    <div>
+      {loading ?
+        <CircularProgress size="1em" /> :
+        <IconButton title='refresh' onClick={() => load()}><RefreshIcon /></IconButton>
+      }
+      <IconButton onClick={onOpenMenu}>
+        <FilterAltIcon />
+      </IconButton>
+      <Menu
+        id="basic-menu"
+        variant="menu"
+        anchorEl={anchor}
+        open={anchor !== undefined}
+        onClose={() => setAnchor(undefined)}
+        onClick={e => e.stopPropagation()}>
+        <MenuItem >
+          <TextField
+            label="MATCH"
+            variant="standard"
+            value={pattern}
+            onChange={(e) => {
+              setPattern(e.target.value || '*');
+              loadDebounced();
+            }} />
+        </MenuItem>
+      </Menu>
+    </div>
+  )
 }
