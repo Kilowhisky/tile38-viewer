@@ -17,7 +17,7 @@ export function Settings() {
       </div>
       <div>
         <FormControlLabel
-          label="Show Static Item Id"
+          label="Show Item Label"
           control={<Checkbox checked={showLabel} onChange={(_, v) => setKey('showStaticLabel', v)} />} />
       </div>
     </Container>

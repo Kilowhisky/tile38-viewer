@@ -1,23 +1,21 @@
 import { useMapStore } from './Map.store';
-import { MapContainer, TileLayer, GeoJSON, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useEffect, useState } from 'react';
-import { circleMarker, LatLngBounds, Map as LeafletMap, tooltip } from 'leaflet';
+import { useEffect } from 'react';
+import { circleMarker, tooltip } from 'leaflet';
 import { useTheme } from '@mui/material';
 import './Map.css';
 import { GeoJsonObject } from 'geojson';
-import bbox from "@turf/bbox";
-import { GetFeatureCollection } from "./KeyItemList.store";
+import { MapPopup } from './MapPopup';
 
 export function Map() {
   const center = useMapStore(x => x.center);
   const zoom = useMapStore(x => x.zoom);
   const set = useMapStore(x => x.setKey);
-  const [map, setMap] = useState<LeafletMap | null>();
   const theme = useTheme();
   const items = useMapStore(x => x.items);
-  const zoomOnSelect = useMapStore(x => x.zoomOnSelect);
   const showLabel = useMapStore(x => x.showStaticLabel);
+  const map = useMapStore(x => x.map);
 
   useEffect(() => {
     const classList = map?.getContainer().classList;
@@ -29,27 +27,14 @@ export function Map() {
   }, [map, theme.palette.mode])
 
   useEffect(() => {
-    if (zoomOnSelect && map && items.length) {
-      const [west, south, east, north] = bbox(
-        GetFeatureCollection(...items.map(x => x.object))
-      );
-      const bounds = new LatLngBounds(
-        { lat: south, lng: west },
-        { lat: north, lng: east }
-      )
-      map.fitBounds(bounds, {
-        maxZoom: 15
-      });
-    }
-  }, [items, map, zoomOnSelect]);
-
-  useEffect(() => {
     map?.on('zoomend', e => set('zoom', e.target.getZoom()));
     map?.on('dragend', e => set('center', e.target.getCenter()));
   }, [map, set]);
 
+
+
   return <MapContainer
-    ref={r => setMap(r)}
+    ref={r => set('map', r)}
     className={'map'}
     style={{ width: '100%', height: '100%' }}
     center={center || [37.0902, -95.7129]}
@@ -76,12 +61,7 @@ export function Map() {
           }
         }}
       >
-        <Popup>
-          <dl className='map-popup'>
-            <div><strong>Key</strong>{data.key}</div>
-            <div><strong>Id</strong>{data.id}</div>
-          </dl>
-        </Popup>
+        <MapPopup data={data} />
       </GeoJSON>
     ))}
     <TileLayer
@@ -90,4 +70,5 @@ export function Map() {
     />
   </MapContainer>
 }
+
 

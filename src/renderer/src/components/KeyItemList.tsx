@@ -31,6 +31,7 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
   const addTopPanel = usePanelTopStore(x => x.addPanel);
   const mapItems = useMapStore(x => x.items);
   const mapItemAdd = useMapStore(x => x.addItem);
+  const zoomMap = useMapStore(x => x.zoomMapToItems);
   const mapItemRemove = useMapStore(x => x.removeItem);
   const match = useKeyItemStore(itemKey, x => x.match);
   const sort = useKeyItemStore(itemKey, x => x.sort);
@@ -75,6 +76,8 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
   function onRowToggle(row: KeyData, checked: boolean) {
     if (checked) {
       mapItemAdd(row);
+      zoomMap();
+
     } else {
       mapItemRemove(row)
     }
@@ -156,10 +159,12 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
                     .filter(x => x.type.toLowerCase() != "string")
                     .every(d => mapItems.includes(d))
                   }
-                  onChange={(_, c) => data
-                    .filter(x => x.type.toLowerCase() != "string")
-                    .forEach(y => onRowToggle(y, c))
-                  }
+                  onChange={(_, c) => {
+                    data
+                      .filter(x => x.type.toLowerCase() != "string")
+                      .forEach(y => onRowToggle(y, c));
+                    zoomMap();
+                  }}
                 />
               </TableCell>
               <TableCell>ID</TableCell>
