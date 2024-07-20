@@ -7,8 +7,8 @@ export interface MapState {
   center?: LatLngExpression | undefined
   zoom?: number
   zoomOnSelect: boolean
+  showStaticLabel: boolean
   items: KeyData[]
-  apiKey: string
   addItem: (item: KeyData) => unknown;
   removeItem: (item: KeyData) => unknown;
   setKey: <T = MapState>(key: keyof T, value: T[keyof T]) => unknown;
@@ -17,7 +17,7 @@ export interface MapState {
 export const useMapStore = create<MapState>((set, get) => ({
   items: [],
   zoomOnSelect: true,
-  apiKey: '',
+  showStaticLabel: true,
   addItem(item) {
     const { items } = get();
     if (!items.includes(item)) {

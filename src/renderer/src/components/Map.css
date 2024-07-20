@@ -11,3 +11,9 @@
     filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
   }
 }
+
+.map-popup {
+   strong {
+    margin-right: 10px;
+  }
+}
