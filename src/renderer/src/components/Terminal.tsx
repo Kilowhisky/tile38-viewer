@@ -24,7 +24,7 @@ export function Terminal() {
           label="Command..."
           onChange={x => setCmd(x.target.value)}
           onKeyDown={e => {
-            if (e.key === "Enter") {
+            if (e.key === "Enter" && cmd) {
               execute(cmd).then(() => {
                 document.getElementById('terminal-history')!.scrollTo({ top: 0 })
               });
