@@ -1,6 +1,6 @@
 {
   "name": "tile38-viewer",
-  "version": "0.0.8",
+  "version": "0.0.13",
   "description": "Utility application for viewing and interacting with a Tile38 server",
   "main": "./out/main/index.js",
   "author": "Kilowhisky",
