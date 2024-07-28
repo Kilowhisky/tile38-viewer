@@ -28,19 +28,28 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: release
-        uses: softprops/action-gh-release@v1
-        with:
-          draft: true
-
       - name: build-mac
         if: matrix.os == 'macos-latest'
         run: npm run build:mac
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: build-win
         if: matrix.os == 'windows-latest'
         run: npm run build:win
+
+      - name: release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          files: |
+            dist/*.exe
+            dist/*.zip
+            dist/*.dmg
+            dist/*.AppImage
+            dist/*.snap
+            dist/*.deb
+            dist/*.rpm
+            dist/*.tar.gz
+            dist/*.yml
+            dist/*.blockmap
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

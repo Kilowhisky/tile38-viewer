@@ -25,6 +25,7 @@ function createWindow(): void {
     mainWindow.show()
   })
 
+  // Auto update requires signed code...
   app.on('ready', () =>  {
     autoUpdater.checkForUpdatesAndNotify();
   });
