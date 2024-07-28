@@ -22,9 +22,12 @@ function createWindow(): void {
   })
 
   mainWindow.on('ready-to-show', () => {
-    autoUpdater.checkForUpdatesAndNotify();
     mainWindow.show()
   })
+
+  app.on('ready', () =>  {
+    autoUpdater.checkForUpdatesAndNotify();
+  });
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
