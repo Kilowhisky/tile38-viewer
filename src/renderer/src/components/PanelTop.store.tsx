@@ -28,14 +28,22 @@ export const usePanelTopStore = create<PanelTopState>((set, get) => ({
   }],
   addPanel(panel: Panel, focus: boolean = true): boolean {
     const panels = get().panels;
-    if (panels.some(x => x.id == panel.id) == false) {
+    const panelExists = panels.some(x => x.id == panel.id);
+
+    if (!panelExists) {
       set({
-        panels: [...panels, panel],
-        focusedPanelId: focus ? panel.id : get().focusedPanelId
+        panels: [...panels, panel]
       })
-      return true;
     }
-    return false;
+
+    if (focus) {
+      set({
+        focusedPanelId: panel.id
+      })
+    }
+
+    // True if panel was added
+    return !panelExists;
   },
   focusPanel(id: string) {
     set({
