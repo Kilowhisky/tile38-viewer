@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -29,16 +29,19 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
   const data = useKeyItemStore(itemKey, x => x.data);
   const total = useKeyItemStore(itemKey, x => x.total);
   const addTopPanel = usePanelTopStore(x => x.addPanel);
-  const mapItems = useMapStore(x => x.items);
-  const mapItemAdd = useMapStore(x => x.addItem);
+  const itemCollections = useMapStore(x => x.items);
+  const addItemCollection = useMapStore(x => x.addItemCollection);
+  const removeItemCollection = useMapStore(x => x.removeItemCollection);
+  const addItems = useMapStore(x => x.addItems);
+  const removeItem = useMapStore(x => x.removeItem);
   const zoomMap = useMapStore(x => x.zoomMapToItems);
-  const mapItemRemove = useMapStore(x => x.removeItem);
   const match = useKeyItemStore(itemKey, x => x.match);
   const sort = useKeyItemStore(itemKey, x => x.sort);
   const where = useKeyItemStore(itemKey, x => x.where);
   const whereIn = useKeyItemStore(itemKey, x => x.whereIn);
   const setKeyItemStore = useKeyItemStore(itemKey, x => x.set);
   const loadDebounced = useDebouncedCallback(() => load(false), 500);
+  const mapItems = useMemo(() => itemCollections.get(itemKey), [itemCollections, itemKey]);
 
   useEffect(() => {
     if (!data.length) {
@@ -55,13 +58,25 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
     })
   }
 
-  function onRowToggle(row: KeyData, checked: boolean) {
+  function onWholeKeyUncheck() {
+    removeItemCollection(itemKey);
+  }
+
+  function onRowToggle(checked: boolean, ...rows: KeyData[]) {
+    const collection = itemCollections.get(itemKey);
     if (checked) {
-      mapItemAdd(row);
+      if (!collection) {
+        addItemCollection({
+          id: itemKey,
+          name: `KEY ${itemKey}`,
+          items: new Map<string, KeyData>()
+        })
+      }
+      addItems(itemKey, ...rows);
       zoomMap();
 
-    } else {
-      mapItemRemove(row)
+    } else if (collection) {
+      rows.forEach(x => removeItem(collection.id, x.id));
     }
   }
 
@@ -135,15 +150,17 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
                 }}>
                 <Checkbox
                   color="primary"
-                  indeterminate={data.some(d => mapItems.includes(d))}
+                  indeterminate={data.some(d => mapItems?.items.has(d.id))}
                   checked={data
                     .filter(x => x.type.toLowerCase() != "string")
-                    .every(d => mapItems.includes(d))
+                    .every(d => mapItems?.items.has(d.id))
                   }
                   onChange={(_, c) => {
-                    data
-                      .filter(x => x.type.toLowerCase() != "string")
-                      .forEach(y => onRowToggle(y, c));
+                    if (c) {
+                      onRowToggle(c, ...data.filter(x => x.type.toLowerCase() != "string"));
+                    } else {
+                      onWholeKeyUncheck();
+                    }
                     zoomMap();
                   }}
                 />
@@ -166,8 +183,8 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
                   <Checkbox
                     color="primary"
                     disabled={r.type.toLowerCase() == "string"}
-                    checked={mapItems.includes(r)}
-                    onChange={(_, c) => onRowToggle(r, c)} />
+                    checked={!!mapItems?.items.has(r.id)}
+                    onChange={(_, c) => onRowToggle(c, r)} />
                 </TableCell>
                 <TableCell>
                   <Link

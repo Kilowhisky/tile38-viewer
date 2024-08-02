@@ -1,7 +1,7 @@
 import { useMapStore } from './Map.store';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { circleMarker, tooltip } from 'leaflet';
 import { useTheme } from '@mui/material';
 import './Map.css';
@@ -13,9 +13,10 @@ export function Map() {
   const zoom = useMapStore(x => x.zoom);
   const set = useMapStore(x => x.setKey);
   const theme = useTheme();
-  const items = useMapStore(x => x.items);
+  const itemCollections = useMapStore(x => x.items);
   const showLabel = useMapStore(x => x.showStaticLabel);
   const map = useMapStore(x => x.map);
+  const items = useMemo(() => [...itemCollections.values()].flatMap(i => [...i.items.values()]), [itemCollections]);
 
   useEffect(() => {
     const classList = map?.getContainer().classList;
