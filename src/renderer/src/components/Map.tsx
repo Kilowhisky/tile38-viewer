@@ -1,12 +1,14 @@
 import { useMapStore } from './Map.store';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { circleMarker, tooltip } from 'leaflet';
 import { useTheme } from '@mui/material';
 import './Map.css';
 import { GeoJsonObject } from 'geojson';
 import { MapPopup } from './MapPopup';
+import Control from 'react-leaflet-custom-control';
+import { MapItemCollectionManager } from './MapItemCollectionManager';
 
 export function Map() {
   const center = useMapStore(x => x.center);
@@ -16,7 +18,6 @@ export function Map() {
   const itemCollections = useMapStore(x => x.items);
   const showLabel = useMapStore(x => x.showStaticLabel);
   const map = useMapStore(x => x.map);
-  const items = useMemo(() => [...itemCollections.values()].flatMap(i => [...i.items.values()]), [itemCollections]);
 
   useEffect(() => {
     const classList = map?.getContainer().classList;
@@ -40,31 +41,38 @@ export function Map() {
     style={{ width: '100%', height: '100%' }}
     center={center || [37.0902, -95.7129]}
     zoom={zoom || 4} >
-    {items.map(data => (
-      <GeoJSON
-        key={`${data.key}_${data.id}`}
-        pointToLayer={(_feature, latlng) => {
-          return circleMarker(latlng, {
-            radius: 4,
-            weight: 3,
-          });
-        }}
-        style={{ weight: 2 }}
-        data={data.object as GeoJsonObject}
-        onEachFeature={(_, layer) => {
-          if (showLabel) {
-            layer.bindTooltip(tooltip({
-              permanent: true,
-              direction: 'bottom',
-              className: 'text',
-              opacity: 0.5
-            }).setContent(data.id));
-          }
-        }}
-      >
-        <MapPopup data={data} />
-      </GeoJSON>
-    ))}
+    {[...itemCollections.values()].map(collection => {
+      return [...collection.items.values()].map(data => (
+        <GeoJSON
+          key={`${collection.id}_${data.id}`}
+          pointToLayer={(_feature, latlng) => {
+            return circleMarker(latlng, {
+              color: collection.color,
+              fillColor: collection.color,
+              radius: 4,
+              weight: 3,
+            });
+          }}
+          style={{ weight: 2 }}
+          data={data.object as GeoJsonObject}
+          onEachFeature={(_, layer) => {
+            if (showLabel) {
+              layer.bindTooltip(tooltip({
+                permanent: true,
+                direction: 'bottom',
+                className: 'text',
+                opacity: 0.5
+              }).setContent(data.id));
+            }
+          }}
+        >
+          <MapPopup data={data} />
+        </GeoJSON>
+      ));
+    })}
+    <Control position="topright">
+      <MapItemCollectionManager />
+    </Control>
     <TileLayer
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -3,10 +3,12 @@ import { KeyData } from "./KeyItemList.store";
 import { LatLngBounds, LatLngExpression, Map as LeafletMap } from "leaflet";
 import bbox from "@turf/bbox";
 import { GetFeatureCollection } from "./KeyItemList.store";
+import { ColorHex } from "./ColorPicker";
 
 export interface ItemCollection {
   readonly id: string;
   readonly name: string;
+  readonly color: ColorHex;
   readonly items: ReadonlyMap<string, KeyData>;
 }
 
@@ -29,7 +31,7 @@ export const useMapStore = create<MapState>((set, get) => ({
   map: undefined,
   items: new Map<string, ItemCollection>(),
   zoomOnSelect: true,
-  showStaticLabel: true,
+  showStaticLabel: false,
 
   addItemCollection(collection) {
     set({

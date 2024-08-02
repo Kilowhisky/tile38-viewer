@@ -1,0 +1,17 @@
+
+.collection {
+  min-width: 150px;
+  padding: 10px;
+
+  display: flex;
+  align-items: center;
+  align-items: center;
+
+  span {
+    vertical-align: middle;
+  }
+
+  span + span {
+    padding-left: 10px;
+  }
+}

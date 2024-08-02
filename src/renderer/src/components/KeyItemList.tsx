@@ -68,7 +68,8 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
       if (!collection) {
         addItemCollection({
           id: itemKey,
-          name: `KEY ${itemKey}`,
+          color: '#3388ff',
+          name: `KEY '${itemKey}'`,
           items: new Map<string, KeyData>()
         })
       }
