@@ -2,16 +2,16 @@ import { StoreApi, UseBoundStore, create, useStore } from "zustand";
 import { useTile38 } from "../lib/tile38Connection.store";
 import { isString } from "../lib/stringHelpers";
 import { CountResponse, ScanObjectResponse, Tile38Object } from "../lib/tile38Connection.models";
-import { unique } from "../lib/arrayHelpers";
+import { unique, uniqueBy } from "../lib/arrayHelpers";
 import { Feature, FeatureCollection, Geometry } from "geojson";
 import { feature, featureCollection } from "@turf/helpers";
 
 export interface KeyData {
-  key: string
-  id: string
-  type: string
-  object: Tile38Object
-  fields: Array<string | number>
+  key: string;
+  id: string;
+  type: string;
+  object: Tile38Object;
+  fields?: Record<string, string | number>;
 }
 
 export interface KeyItemState {
@@ -22,7 +22,7 @@ export interface KeyItemState {
   fields: string[];
   loading: boolean;
   match: string;
-  sort: 'ASC' | 'DESC';
+  sort: "ASC" | "DESC";
   where: string;
   whereIn: string;
   limit: number;
@@ -33,9 +33,8 @@ export interface KeyItemState {
 
 const stores: { [key: string]: UseBoundStore<StoreApi<KeyItemState>> } = {};
 
-
-export function useKeyItemStore(key: string): KeyItemState
-export function useKeyItemStore<T>(key: string, selector: (state: KeyItemState) => T): T
+export function useKeyItemStore(key: string): KeyItemState;
+export function useKeyItemStore<T>(key: string, selector: (state: KeyItemState) => T): T;
 export function useKeyItemStore<T>(key: string, selector?: (state: KeyItemState) => T) {
   if (!stores[key]) {
     stores[key] = create<KeyItemState>((set, get) => ({
@@ -45,11 +44,11 @@ export function useKeyItemStore<T>(key: string, selector?: (state: KeyItemState)
       sort: "ASC",
       limit: 50,
       loading: false,
-      match: '',
-      where: '',
-      whereIn: '',
+      match: "",
+      where: "",
+      whereIn: "",
       set(field, value) {
-        set({ [field]: value })
+        set({ [field]: value });
       },
       reset() {
         set({
@@ -57,11 +56,11 @@ export function useKeyItemStore<T>(key: string, selector?: (state: KeyItemState)
           fields: [],
           cursor: undefined,
           total: undefined,
-          sort: 'ASC',
-          match: '',
-          where: '',
-          whereIn: ''
-        })
+          sort: "ASC",
+          match: "",
+          where: "",
+          whereIn: "",
+        });
       },
       async load(append = true) {
         const { key, cursor, data, fields, limit, sort, match, where, whereIn } = get();
@@ -94,20 +93,30 @@ export function useKeyItemStore<T>(key: string, selector?: (state: KeyItemState)
         if (response.ok) {
           result.cursor = response.cursor;
           result.fields = unique([...fields, ...(response.fields || [])]);
-          result.data = [
-            ...(append ? data : []),
-            ...response.objects.map(x => ({
-              key,
-              id: x.id,
-              type: isString(x.object) ? "String" : (x.object as Geometry).type,
-              object: x.object,
-              fields: x.fields || []
-            }))
-          ];
+          result.data = uniqueBy(
+            [
+              ...(append ? data : []),
+              ...response.objects.map((x) => ({
+                key,
+                id: x.id,
+                type: isString(x.object) ? "String" : (x.object as Geometry).type,
+                object: x.object,
+                fields:
+                  x.fields &&
+                  response.fields?.reduce((result, key, index) => {
+                    if (x.fields!.length > index) {
+                      result[key] = x.fields![index];
+                    }
+                    return result;
+                  }, {}),
+              })),
+            ],
+            "id"
+          );
         }
 
-        set({ ...result, loading: false })
-      }
+        set({ ...result, loading: false });
+      },
     }));
   }
   return useStore(stores[key], selector!);
@@ -117,17 +126,13 @@ export function GetFeatureCollection(...items: Tile38Object[]): FeatureCollectio
   return featureCollection(
     items.reduce((out, item) => {
       if ((item as FeatureCollection).type == "FeatureCollection") {
-         out.push(...(item as FeatureCollection).features);
-      }
-      else if ((item as Feature).type == "Feature") {
+        out.push(...(item as FeatureCollection).features);
+      } else if ((item as Feature).type == "Feature") {
         out.push(item as Feature);
-      }
-      else if (typeof item !== 'string' && item instanceof String == false) {
-        out.push(
-          feature(item as Geometry)
-        )
+      } else if (typeof item !== "string" && item instanceof String == false) {
+        out.push(feature(item as Geometry));
       }
       return out;
     }, [] as Feature[])
-  )
+  );
 }

@@ -13,3 +13,9 @@ export function unique<T>(arr: Array<T>) {
     return arr.indexOf(item) == index;
   })
 }
+
+export function uniqueBy<T>(arr: Array<T>, key: keyof T) {
+  return arr.filter((item, index) => {
+    return arr.findIndex(a => a[key] == item[key]) == index;
+  })
+}

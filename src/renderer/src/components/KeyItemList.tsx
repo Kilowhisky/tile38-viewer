@@ -9,7 +9,7 @@ import { ItemTtl } from "./ItemTtl";
 import { KeyData, useKeyItemStore } from "./KeyItemList.store";
 import { LoadingButton } from "@mui/lab";
 import { usePanelTopStore } from "./PanelTop.store";
-import { KeyItem, KeyItemView } from "./KeyItemView";
+import { KeyItemView } from "./KeyItemView";
 import { useMapStore } from "./Map.store";
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -46,30 +46,12 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
     }
   }, [])
 
-  function emptyCells(count: number) {
-    if (count > 0) {
-      return <TableCell colSpan={count} />
-    }
-    return undefined;
-  }
-
   function onRowClick(row: KeyData) {
-    const item: KeyItem = {
-      key: itemKey,
-      id: row.id,
-      object: row.object,
-      fields: fields.reduce((o, k, i) => {
-        if (row.fields.length > i) {
-          o[k] = row.fields[i];
-        }
-        return o;
-      }, {} as Record<string, string | number>)
-    }
     addTopPanel({
       id: row.id,
       label: row.id,
       closable: true,
-      component: <KeyItemView item={item} />
+      component: <KeyItemView item={row} />
     })
   }
 
@@ -139,7 +121,6 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
           '& .cell-text': {
             textWrap: 'nowrap',
             textOverflow: 'ellipsis',
-            maxWidth: '10em',
             display: 'table-cell',
             overflow: 'hidden'
           }
@@ -197,12 +178,11 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
                 </TableCell>
                 <TableCell><span className="cell-text">{r.type}</span></TableCell>
                 <TableCell><span className="cell-text"><ItemTtl itemKey={itemKey} id={r.id} /></span></TableCell>
-                {r.fields.map((f, i) => (
-                  <TableCell key={`${itemKey}_field_${fields[i] || i}`}>
-                    <span className="cell-text">{f}</span>
+                {fields.map(key => (
+                  <TableCell key={`${itemKey}_field_${key}`}>
+                    <span className="cell-text">{r.fields && r.fields[key]}</span>
                   </TableCell>
                 ))}
-                {emptyCells(fields.length - r.fields.length)}
               </TableRow>
             ))}
           </TableBody>
