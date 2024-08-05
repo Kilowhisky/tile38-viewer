@@ -1,6 +1,7 @@
-import { Grid, TextField } from "@mui/material"
+import { Grid, IconButton, TextField } from "@mui/material"
 import { LoadingButton } from '@mui/lab';
 import LoginIcon from '@mui/icons-material/Login';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
 
 export interface ConnectionInfo {
@@ -13,9 +14,10 @@ export interface ConnectionProps {
   connection: ConnectionInfo
   onChange: (value: ConnectionInfo) => unknown;
   onSubmit: (value: ConnectionInfo) => Promise<boolean>;
+  onDelete: (value: ConnectionInfo) => unknown;
 }
 
-export function Connection({ connection, onChange, onSubmit }: ConnectionProps) {
+export function Connection({ connection, onChange, onSubmit, onDelete }: ConnectionProps) {
   const [connecting, setConnecting] = useState(false);
   const [hasError, setHasError] = useState(false);
 
@@ -35,6 +37,7 @@ export function Connection({ connection, onChange, onSubmit }: ConnectionProps) 
           <TextField
             required
             fullWidth
+            size="small"
             label="Address:Port"
             placeholder="x.x.x.x:9851"
             error={hasError}
@@ -49,6 +52,7 @@ export function Connection({ connection, onChange, onSubmit }: ConnectionProps) 
         <Grid item xs={12} sm={9} >
           <TextField
             fullWidth
+            size="small"
             label="Password"
             type="password"
             error={hasError}
@@ -60,8 +64,9 @@ export function Connection({ connection, onChange, onSubmit }: ConnectionProps) 
             })}
           />
         </Grid>
-        <Grid item>
+        <Grid item display={"flex"} justifyContent={"space-between"}>
           <LoadingButton
+            size="small"
             color={"primary"}
             title="Connect"
             disabled={!connection.address}
@@ -70,6 +75,13 @@ export function Connection({ connection, onChange, onSubmit }: ConnectionProps) 
             type="submit">
             Connect
           </LoadingButton>
+          <IconButton
+            size="small"
+            color={"error"}
+            title="Remove"
+            onClick={() => onDelete(connection)}>
+            <DeleteIcon />
+          </IconButton>
         </Grid>
       </Grid >
     </form>

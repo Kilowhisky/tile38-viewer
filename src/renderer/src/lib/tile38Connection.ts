@@ -11,7 +11,7 @@ export class Tile38Connection {
   }
 
   async connect(): Promise<boolean> {
-    return (this.ready = (await this.raw("SERVER")).ok)
+    return (this.ready = (await this.raw("SERVER")).ok);
   }
 
   async ping(): Promise<boolean> {
@@ -24,37 +24,37 @@ export class Tile38Connection {
   }
 
   async keysCount(key: string): Promise<CountResponse> {
-    return await this._makeRequest<CountResponse>(`SCAN ${key} MATCH * COUNT`)
+    return await this._makeRequest<CountResponse>(`SCAN ${key} MATCH * COUNT`);
   }
 
   async stats(...keys: string[]): Promise<StatsResponse> {
-    return await this._makeRequest<StatsResponse>(`STATS ${keys.join(' ')}`)
+    return await this._makeRequest<StatsResponse>(`STATS ${keys.join(" ")}`);
   }
 
-  async get(key: string, id: string, type: 'OBJECT' | 'POINT' | 'BOUNDS'): Promise<ObjectResponse> {
-    return await this._makeRequest<ObjectResponse>(`GET ${key} ${id} ${type}`)
+  async get(key: string, id: string, type: "OBJECT" | "POINT" | "BOUNDS"): Promise<ObjectResponse> {
+    return await this._makeRequest<ObjectResponse>(`GET ${key} ${id} ${type}`);
   }
 
   private async _makeRequest<RType extends CmdResponse>(command: string): Promise<RType> {
-    const request: Request = new Request(this._info.address, {
-      method: 'POST',
-      body: command,
-      headers: {
-        'Content-Type': 'text/plain',
-      }
-    });
-    if (this._info.password) {
-      request.headers.set("Authorization", this._info.password);
-    }
-
     try {
+      const request: Request = new Request(this._info.address, {
+        method: "POST",
+        body: command,
+        headers: {
+          "Content-Type": "text/plain",
+        },
+      });
+      if (this._info.password) {
+        request.headers.set("Authorization", this._info.password);
+      }
+
       const response = await fetch(request);
       const result = await response.text();
       if (response.ok) {
         return {
           command,
-          ...JSON.parse(result)
-        }
+          ...JSON.parse(result),
+        };
       }
       throw new Error(`Bad result returned from Til38: ${result}`);
     } catch (err) {
@@ -62,8 +62,8 @@ export class Tile38Connection {
         command,
         ok: false,
         elapsed: "0µs",
-        error: err
-      } as RType
+        error: err,
+      } as RType;
     }
   }
 }

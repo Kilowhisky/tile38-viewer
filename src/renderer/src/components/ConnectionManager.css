@@ -1,0 +1,7 @@
+.connection-container {
+  overflow-y: auto;
+
+  .connection + .connection {
+    margin-top: 20px;
+  }
+}
