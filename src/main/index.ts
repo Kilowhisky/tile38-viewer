@@ -26,9 +26,10 @@ function createWindow(): void {
   })
 
   // Auto update requires signed code...
-  app.on('ready', () =>  {
-    autoUpdater.checkForUpdatesAndNotify();
-  });
+  // Not ready for that yet.
+  // app.on('ready', () =>  {
+  //   autoUpdater.checkForUpdatesAndNotify();
+  // });
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
