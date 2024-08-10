@@ -53,7 +53,11 @@ export function Map() {
               weight: 3,
             });
           }}
-          style={{ weight: 2 }}
+          style={{
+            weight: 2,
+            color: collection.color,
+            fillColor: collection.color
+          }}
           data={data.object as GeoJsonObject}
           onEachFeature={(_, layer) => {
             if (showLabel) {
