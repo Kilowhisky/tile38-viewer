@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
-import { create } from "zustand";
-import { Map } from "./Map";
-import { removeItem } from "../lib/arrayHelpers";
+import { ReactNode } from "react"
+import { create } from "zustand"
+import { Map } from "./Map"
+import { removeItem } from "../lib/arrayHelpers"
 
 export interface Panel {
   id: string
@@ -19,43 +19,45 @@ export interface PanelTopState {
 }
 
 export const usePanelTopStore = create<PanelTopState>((set, get) => ({
-  focusedPanelId: 'map',
-  panels: [{
-    id: 'map',
-    label: 'Map',
-    closable: false,
-    component: <Map />
-  }],
+  focusedPanelId: "map",
+  panels: [
+    {
+      id: "map",
+      label: "Map",
+      closable: false,
+      component: <Map />,
+    },
+  ],
   addPanel(panel: Panel, focus: boolean = true): boolean {
-    const panels = get().panels;
-    const panelExists = panels.some(x => x.id == panel.id);
+    const panels = get().panels
+    const panelExists = panels.some(x => x.id == panel.id)
 
     if (!panelExists) {
       set({
-        panels: [...panels, panel]
+        panels: [...panels, panel],
       })
     }
 
     if (focus) {
       set({
-        focusedPanelId: panel.id
+        focusedPanelId: panel.id,
       })
     }
 
     // True if panel was added
-    return !panelExists;
+    return !panelExists
   },
   focusPanel(id: string) {
     set({
-      focusedPanelId: id
+      focusedPanelId: id,
     })
   },
   removePanel(panel: Panel) {
-    const { panels, focusedPanelId } = get();
-    const index = panels.indexOf(panel);
+    const { panels, focusedPanelId } = get()
+    const index = panels.indexOf(panel)
     set({
       panels: [...removeItem(panels, panel)],
-      focusedPanelId: focusedPanelId == panel.id ? panels[index - 1].id : focusedPanelId
+      focusedPanelId: focusedPanelId == panel.id ? panels[index - 1].id : focusedPanelId,
     })
-  }
-}));
+  },
+}))

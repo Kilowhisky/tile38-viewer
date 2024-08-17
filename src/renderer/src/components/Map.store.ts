@@ -50,7 +50,7 @@ export const useMapStore = create<MapState>((set, get) => ({
     const collection = items.get(collectionId)
     if (collection) {
       set({
-        items: new Map([...items].filter((x) => x[0] != collectionId)),
+        items: new Map([...items].filter(x => x[0] != collectionId)),
       })
     }
     return !!collection
@@ -66,7 +66,7 @@ export const useMapStore = create<MapState>((set, get) => ({
             collection.id,
             {
               ...collection,
-              items: new Map([...collection.items, ...(newItems.map((y) => [y.id, y]) as Iterable<readonly [string, MapData]>)]),
+              items: new Map([...collection.items, ...(newItems.map(y => [y.id, y]) as Iterable<readonly [string, MapData]>)]),
             },
           ],
         ]),
@@ -80,11 +80,11 @@ export const useMapStore = create<MapState>((set, get) => ({
 
     if (collection) {
       // Remove the item from the collection
-      const newCollectionItems = [...collection.items].filter((x) => x[0] != itemId)
+      const newCollectionItems = [...collection.items].filter(x => x[0] != itemId)
       // If the collection is empty, remove the collection
       if (newCollectionItems.length == 0) {
         set({
-          items: new Map([...items].filter((x) => x[0] != collectionId)),
+          items: new Map([...items].filter(x => x[0] != collectionId)),
         })
       } else {
         // Construct a whole new Map without the item
@@ -108,7 +108,7 @@ export const useMapStore = create<MapState>((set, get) => ({
   zoomMapToItems() {
     const { zoomOnSelect, items, map } = get()
     if (zoomOnSelect && map && items.size) {
-      const geojsons = [...items.values()].flatMap((x) => [...x.items.values()]).map((x) => x.object)
+      const geojsons = [...items.values()].flatMap(x => [...x.items.values()]).map(x => x.object)
       const [west, south, east, north] = bbox(GetFeatureCollection(...geojsons))
       const bounds = new LatLngBounds({ lat: south, lng: west }, { lat: north, lng: east })
       map.fitBounds(bounds, {
@@ -129,11 +129,11 @@ export function getMapDataFromResult(response: CmdResponse): MapData[] {
     ]
   } else if (IsScanObjectResponse(response)) {
     return response.objects
-      .filter((x) => typeof x.object == "object")
-      .map((x) => ({
+      .filter(x => typeof x.object == "object")
+      .map(x => ({
         id: x.id,
         object: x.object,
-        fields: GetFieldsFromScanObject(x)
+        fields: GetFieldsFromScanObject(x),
       }))
   }
   return []

@@ -1,7 +1,7 @@
 /* from here: https://dev.to/deepakdevanand/leaflet-map-dark-theme-5ej0 */
 .map-dark {
   &.leaflet-container {
-    background: #000
+    background: #000;
   }
 
   .leaflet-layer,
@@ -13,7 +13,7 @@
 }
 
 .map-popup {
-   strong {
+  strong {
     margin-right: 10px;
   }
 }

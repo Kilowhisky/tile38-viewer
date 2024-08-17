@@ -1,2 +1,4 @@
 printWidth: 600
 trailingComma: es5
+semi: false
+arrowParens: "avoid"

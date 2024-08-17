@@ -1,7 +1,3 @@
-
-
 export function Hooks() {
-  return (
-    <p>Coming Soon</p>
-  )
+  return <p>Coming Soon</p>
 }

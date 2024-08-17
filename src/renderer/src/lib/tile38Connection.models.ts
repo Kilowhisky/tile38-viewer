@@ -56,7 +56,7 @@ export function GetFieldsFromScanObject(scanResult: ScanObject): Record<string, 
       return result
     }, {})
   }
-  return undefined;
+  return undefined
 }
 
 export interface ScanObjectResponse extends CmdResponse, PagingResponse {

@@ -1,7 +1,3 @@
-
-
 export function Channels() {
-  return (
-    <p>Coming Soon</p>
-  )
+  return <p>Coming Soon</p>
 }

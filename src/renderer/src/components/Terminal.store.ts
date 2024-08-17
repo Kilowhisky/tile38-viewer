@@ -1,6 +1,6 @@
-import { create } from 'zustand'
-import { CmdResponse } from '../lib/tile38Connection.models'
-import { useTile38 } from '../lib/tile38Connection.store'
+import { create } from "zustand"
+import { CmdResponse } from "../lib/tile38Connection.models"
+import { useTile38 } from "../lib/tile38Connection.store"
 
 interface CommandEntry {
   id: string
@@ -8,7 +8,7 @@ interface CommandEntry {
 }
 
 interface TerminalState {
-  cmd: string,
+  cmd: string
   history: CommandEntry[]
   execute: (cmd: string) => Promise<CommandEntry>
   setCmd: (cmd: string) => unknown
@@ -17,23 +17,20 @@ interface TerminalState {
 
 export const useTerminalStore = create<TerminalState>()((set, get) => {
   return {
-    cmd: '',
+    cmd: "",
     history: [],
 
     async execute(cmd: string) {
-      const tile38 = useTile38.getState().connection!;
+      const tile38 = useTile38.getState().connection!
       const entry = {
         id: crypto.randomUUID(),
-        cmd: await tile38.raw(cmd)
+        cmd: await tile38.raw(cmd),
       }
       set(() => ({
-        cmd: '',
-        history: [
-          ...get().history,
-          entry
-        ]
+        cmd: "",
+        history: [...get().history, entry],
       }))
-      return entry;
+      return entry
     },
 
     setCmd(cmd: string) {
@@ -43,6 +40,5 @@ export const useTerminalStore = create<TerminalState>()((set, get) => {
     clear() {
       set({ history: [] })
     },
-
   }
 })
