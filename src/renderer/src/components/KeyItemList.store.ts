@@ -1,7 +1,7 @@
 import { StoreApi, UseBoundStore, create, useStore } from "zustand";
 import { useTile38 } from "../lib/tile38Connection.store";
 import { isString } from "../lib/stringHelpers";
-import { CountResponse, ScanObjectResponse, Tile38Object } from "../lib/tile38Connection.models";
+import { CountResponse, GetFieldsFromScanObject, ScanObjectResponse, Tile38Object } from "../lib/tile38Connection.models";
 import { unique, uniqueBy } from "../lib/arrayHelpers";
 import { Feature, FeatureCollection, Geometry } from "geojson";
 import { feature, featureCollection } from "@turf/helpers";
@@ -101,14 +101,7 @@ export function useKeyItemStore<T>(key: string, selector?: (state: KeyItemState)
                 id: x.id,
                 type: isString(x.object) ? "String" : (x.object as Geometry).type,
                 object: x.object,
-                fields:
-                  x.fields &&
-                  response.fields?.reduce((result, key, index) => {
-                    if (x.fields!.length > index) {
-                      result[key] = x.fields![index];
-                    }
-                    return result;
-                  }, {}),
+                fields: GetFieldsFromScanObject(x)
               })),
             ],
             "id"

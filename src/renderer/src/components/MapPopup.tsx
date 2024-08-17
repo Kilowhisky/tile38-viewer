@@ -1,11 +1,11 @@
 import { Popup } from "react-leaflet";
-import { KeyData } from "./KeyItemList.store";
 import { KeyItemView } from "./KeyItemView";
 import { usePanelTopStore } from "./PanelTop.store";
 import { Link } from "@mui/material";
 import './MapPopup.css';
+import { MapData } from "./Map.store";
 
-export function MapPopup({ data }: { data: KeyData; }) {
+export function MapPopup({ data }: { data: MapData; }) {
   const addTopPanel = usePanelTopStore(x => x.addPanel);
 
   function onViewItem() {
@@ -20,10 +20,10 @@ export function MapPopup({ data }: { data: KeyData; }) {
   return (
     <Popup>
       <div className="map-popup">
-        <div className="kv-row">
+        {data.key && <div className="kv-row">
           <span className="key">Key</span>
           <span className="value">{data.key}</span>
-        </div>
+        </div>}
         <div className="kv-row">
           <span className="key">Id</span>
           <span className="value">

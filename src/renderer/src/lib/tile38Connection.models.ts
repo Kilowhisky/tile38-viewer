@@ -47,11 +47,32 @@ export interface ScanObject {
   object: Tile38Object
 }
 
-export interface ScanObjectResponse extends CmdResponse, PagingResponse  {
+export function GetFieldsFromScanObject(scanResult: ScanObject): Record<string, string | number> | undefined {
+  if (scanResult.fields) {
+    return scanResult.fields.reduce((result, key, index) => {
+      if (scanResult.fields!.length > index) {
+        result[key] = scanResult.fields![index]
+      }
+      return result
+    }, {})
+  }
+  return undefined;
+}
+
+export interface ScanObjectResponse extends CmdResponse, PagingResponse {
   objects: Array<ScanObject>
   fields?: string[]
 }
 
+export function IsScanObjectResponse(response: CmdResponse): response is ScanObjectResponse {
+  return !!(response as ScanObjectResponse).objects
+}
+
 export interface ObjectResponse extends CmdResponse {
   object: Tile38Object
+  fields?: Record<string, string | number>
+}
+
+export function IsObjectResponse(response: CmdResponse): response is ObjectResponse {
+  return !!(response as ObjectResponse).object
 }
