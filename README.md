@@ -13,11 +13,12 @@ Head over to [releases](https://github.com/Kilowhisky/tile38-viewer/releases) to
 ### Running on Mac
 
 Due to signing limitations and Mac OS. You need to perform the following in order to open the app.
-See [this thread on apple.com for more info about it](https://discussions.apple.com/thread/253714860?sortBy=rank)
 
 ```bash
 xattr -c <path/to/application.app>
 ```
+
+See [this thread on apple.com for more info about it](https://discussions.apple.com/thread/253714860?sortBy=rank)
 
 ## Recommended IDE Setup
 
