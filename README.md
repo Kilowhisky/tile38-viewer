@@ -10,6 +10,15 @@ Tile38 Viewer is a utility application for viewing and interacting with data in 
 
 Head over to [releases](https://github.com/Kilowhisky/tile38-viewer/releases) to get the latest desktop binary.
 
+### Running on Mac
+
+Due to signing limitations and Mac OS. You need to perform the following in order to open the app.
+See [this thread on apple.com for more info about it](https://discussions.apple.com/thread/253714860?sortBy=rank)
+
+```bash
+xattr -c <path/to/application.app>
+```
+
 ## Recommended IDE Setup
 
 - [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
