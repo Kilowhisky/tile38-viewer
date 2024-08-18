@@ -9,12 +9,12 @@ import { ItemTtl } from "./ItemTtl"
 import { KeyData, useKeyItemStore } from "./KeyItemList.store"
 import { LoadingButton } from "@mui/lab"
 import { usePanelTopStore } from "./PanelTop.store"
-import { KeyItemView } from "./KeyItemView"
 import { useMapStore } from "./Map.store"
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward"
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"
 import { useDebouncedCallback } from "use-debounce"
 import Grid from "@mui/material/Unstable_Grid2"
+import { JsonView } from "./JsonView"
 
 // Based on this: https://mui.com/material-ui/react-table/
 // -------------------------------------------------------------------------
@@ -54,7 +54,7 @@ export function KeyItemList({ itemKey }: KeyItemListProps) {
       id: row.id,
       label: row.id,
       closable: true,
-      component: <KeyItemView item={row} />,
+      component: <JsonView data={row} />,
     })
   }
 

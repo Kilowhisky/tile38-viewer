@@ -1,9 +1,9 @@
 import { Popup } from "react-leaflet"
-import { KeyItemView } from "./KeyItemView"
 import { usePanelTopStore } from "./PanelTop.store"
 import { Link } from "@mui/material"
 import "./MapPopup.css"
 import { MapData } from "./Map.store"
+import { JsonView } from "./JsonView"
 
 export function MapPopup({ data }: { data: MapData }) {
   const addTopPanel = usePanelTopStore(x => x.addPanel)
@@ -13,7 +13,7 @@ export function MapPopup({ data }: { data: MapData }) {
       id: data.id,
       label: data.id,
       closable: true,
-      component: <KeyItemView item={data} />,
+      component: <JsonView data={data} />,
     })
   }
 
