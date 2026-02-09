@@ -34,7 +34,7 @@ export function Map() {
   }, [map, set])
 
   return (
-    <MapContainer ref={r => set("map", r)} className={"map"} style={{ width: "100%", height: "100%" }} center={center || [37.0902, -95.7129]} zoom={zoom || 4}>
+    <MapContainer ref={r => set("map", r)} className={"map"} style={{ width: "100%", height: "100%" }} center={center || ([37.0902, -95.7129] as any)} zoom={zoom || 4}>
       {[...itemCollections.values()].map(collection => {
         return [...collection.items.values()].map(data => (
           <GeoJSON

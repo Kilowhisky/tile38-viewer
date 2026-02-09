@@ -32,7 +32,7 @@ export function ColorPicker({ color, onChange }: { color: ColorHex; onChange: (c
           horizontal: "right",
         }}
       >
-        <SketchPicker color={color} onChange={c => onChange(c.hex)} />
+        <SketchPicker color={color} onChange={c => onChange(c.hex as ColorHex)} />
       </Popover>
     </div>
   )

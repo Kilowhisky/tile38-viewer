@@ -49,7 +49,7 @@ export interface ScanObject {
 
 export function GetFieldsFromScanObject(scanResult: ScanObject): Record<string, string | number> | undefined {
   if (scanResult.fields) {
-    return scanResult.fields.reduce((result, key, index) => {
+    return scanResult.fields.reduce<Record<string, string | number>>((result, key, index) => {
       if (scanResult.fields!.length > index) {
         result[key] = scanResult.fields![index]
       }

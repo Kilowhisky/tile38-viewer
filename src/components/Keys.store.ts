@@ -2,7 +2,7 @@ import { create } from "zustand"
 import { KeyStats, KeysResponse } from "../lib/tile38Connection.models"
 import { useTile38 } from "../lib/tile38Connection.store"
 import { removeItem } from "../lib/arrayHelpers"
-import { Tile38Connection } from "@renderer/lib/tile38Connection"
+import { Tile38Connection } from "@/lib/tile38Connection"
 
 export class KeySummary {
   constructor(

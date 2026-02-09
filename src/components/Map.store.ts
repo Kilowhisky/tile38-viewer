@@ -3,7 +3,7 @@ import { LatLngBounds, LatLngExpression, Map as LeafletMap } from "leaflet"
 import bbox from "@turf/bbox"
 import { GetFeatureCollection } from "./KeyItemList.store"
 import { ColorHex } from "./ColorPicker"
-import { CmdResponse, GetFieldsFromScanObject, IsObjectResponse, IsScanObjectResponse, Tile38Object } from "@renderer/lib/tile38Connection.models"
+import { CmdResponse, GetFieldsFromScanObject, IsObjectResponse, IsScanObjectResponse, Tile38Object } from "@/lib/tile38Connection.models"
 
 export interface MapData {
   key?: string
